@@ -11,5 +11,8 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  // GetAllCategories():Observable<Icategory[]>
+  // {
+  //   return this.httpClient.get<Icategory[]>(`${environment.baseUrl}category/getAllCategories`);
+  // }
 }
