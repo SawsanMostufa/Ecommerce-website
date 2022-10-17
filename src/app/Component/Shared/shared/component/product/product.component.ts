@@ -25,10 +25,10 @@ ProductID:any;
     //   console.log(this.productListOfCat);
     // })
   }
-   
   ngOnInit(): void {
 
     this.service.GetProduct().subscribe(response =>{
+      debugger
       this.ProductList = response.data;
       console.log(this.ProductList);
   });
