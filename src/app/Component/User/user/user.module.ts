@@ -29,6 +29,8 @@ const routes: Routes = [
   {path: 'checkoutreview', component:CheckoutReviewComponent},
   {path: 'cleckoutpayment', component:CheckoutPaymentComponent},
   {path: 'cleckoutsuccess', component:CheckoutSuccessComponent},
+  {path: 'productdetails', component:ProductDetailsComponent},
+
 
 
 ];
