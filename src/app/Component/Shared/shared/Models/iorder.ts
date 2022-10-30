@@ -14,11 +14,11 @@ export interface Iorder {
 }
 
 export interface IOrderItem {
+       
         productId: number;
         productName: string;
-        pictureUrl: string;
         productSizes:Size[];
-        price: number;
-        quantity: number;
+        pictureUrl: string;
+        category: string;
         
 }
