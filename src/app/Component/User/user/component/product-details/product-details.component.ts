@@ -49,7 +49,7 @@ export class ProductDetailsComponent implements OnInit {
   
     // this.defaultprice=1;
    
- }
+//  }
 
   
 }
