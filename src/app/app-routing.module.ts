@@ -15,7 +15,7 @@ const routes: Routes = [
       {path: '**', component:NotFoundComponent }
     
 ];
-
+///shared/shop
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

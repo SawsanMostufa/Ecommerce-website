@@ -24,7 +24,8 @@ import { CommonModule } from '@angular/common';
     AdminModule,
     AdminRoutingModule,
     FormsModule,
-   CommonModule
+   CommonModule,
+   
   ],
   providers: [],
   bootstrap: [AppComponent]

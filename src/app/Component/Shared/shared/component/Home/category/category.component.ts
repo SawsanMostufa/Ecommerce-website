@@ -12,25 +12,30 @@ import { CategoryService } from '../../../Services/category.service';
 export class CategoryComponent implements OnInit {
  
   category:Icategory[]=[];
+  categoryid :any;
   constructor(private service:CategoryService, private router:Router) { }
        
+  ngOnChange(){
+    // this.service.GetCategoryByID(id).subscribe(cat =>{
+    //   this.categoryid=cat;
+    //   console.log(this.categoryid);
+    // });
+  }
   ngOnInit(): void {
      this.service.GetAllCategories().subscribe(cat =>{
       this.category=cat;
-      
+      console.log(this.category)
   });
 }
   
-  // getAllCourses(){
-  //      return this.service.GetAllCategories().subscribe(cat =>{
-  //       this.category=cat;
-  //       console.log(this.category);
-  //     })
-      // err => {
-      //   console.log(err.message);
-      //  })
+ getCategoryByID(id:number)
+ {
+  this.service.GetCategoryByID(id).subscribe(cat =>{
+    this.categoryid=cat;
+    console.log(this.categoryid);
+ });
     
-    
+}
 
 
 }

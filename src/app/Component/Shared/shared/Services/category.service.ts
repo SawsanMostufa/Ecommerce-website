@@ -8,7 +8,7 @@ import { Icategory } from '../Models/icategory';
   providedIn: 'root'
 })
 export class CategoryService {
- 
+
   constructor(private httpClient:HttpClient) { }
 
   
@@ -16,8 +16,10 @@ GetAllCategories():Observable<Icategory[]>
 {
   return this.httpClient.get<Icategory[]>(`${environment.baseUrl}category/getAllCategories`);
 }
-GetCategoryByID(id:number):Observable<Icategory[]>
+
+GetCategoryByID(id:number):Observable<Icategory>
 {
- return this.httpClient.get<Icategory[]>('${environment.baseUrl}category/getAllCategories');
+  return this.httpClient.get<Icategory>(`${environment.baseUrl}Category/getCategor/${id}`);
+  
 }
 }

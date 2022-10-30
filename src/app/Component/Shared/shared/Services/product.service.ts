@@ -15,18 +15,27 @@ export class ProductService {
 
   GetProduct():Observable<productModel>
   {
-     return this.httpclient.get<productModel>(`${environment.baseUrl}Product/getProducts`);
+   return this.httpclient.get<productModel>(`${environment.baseUrl}Product/getProducts`);
+  
   }
 
-  // GetProductByCatID(catID:any):Observable<any>
-  // {
-  //   return this.httpclient.get<any>(`${environment.baseUrl}Product?getCategor=${catID}`);
-  // }
-
-  GetProductID(id:number):Observable<any>
+  GetProductByCatID(catID:number):Observable<productModel>
   {
-    return this.httpclient.get<any>(`${environment.baseUrl}Product/getProduct/${id}`);
+    return this.httpclient.get<productModel>(`${environment.baseUrl}Product?getCategor=${catID}`);
+  }
+
+  GetProductID(id:number):Observable<productModel>
+  {
+      
+    return this.httpclient.get<productModel>(`${environment.baseUrl}Product/getProduct/${id}`);
     
+  }
+
+ 
+  GetLatestProducts():Observable<Iproduct[]>
+  {
+   return this.httpclient.get<Iproduct[]>(`${environment.baseUrl}Product/getLatestProducts`);
+  
   }
 
   // addProduct(newprd:Iproduct):Observable<Iproduct>

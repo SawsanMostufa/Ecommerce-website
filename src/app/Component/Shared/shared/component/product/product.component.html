@@ -1,14 +1,19 @@
 <section class="p-5">
     <div class="row">
-        <div class="col-md-4" *ngFor="let product of ProductList">
-            <div class="card mb-4 product-wap rounded-0">
+        <div class="col-md-4" *ngFor="let product of productListOfCat">
+            <div class="card mb-4 product-wap rounded-0" >
                 <div class="card rounded-0">
-                    <img class="card-img rounded-0 img-fluid" src="assets/img/shop_01.jpg">
-                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                        <ul class="list-unstyled">
-                            <li><a class="btn btn-success text-white" href="#"><i class="far fa-heart"></i></a></li>
-                            <li><a class="btn btn-success text-white mt-2" href="#"><i class="fa-thin fa-cart-shopping"></i></a></li>
-                            <li><a class="btn btn-success text-white mt-2" href="#"><i class="fa-thin fa-cart-shopping"></i></a></li>
+                    <img class="card-img rounded-0 img-fluid imgsty" src="{{image + product.pictureUrl}}">
+                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center ">
+                        
+                        <ul class="list-unstyled ">
+                            <li>
+                            <button routerLink="/user/productdetails/{{product.id}}" type="button" class="btn btn-success">View</button>
+                        </li>
+                            <li>
+
+                                <button (click)="addItemToBasket(product)" (sendproduct)="addtocart($event)"  type="button" class="btn btn-success fa fa-shopping-cart mr-2" ></button>
+                            </li>
                         </ul>
                     </div>
                 </div>

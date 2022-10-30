@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
 import { Iproduct } from '../../Models/iproduct';
+import { productModel } from '../../Models/productModel';
 import { ProductService } from '../../Services/product.service';
 
 
@@ -10,36 +14,70 @@ import { ProductService } from '../../Services/product.service';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
-export class ProductComponent implements OnInit {
-// ProductList:any;
-ProductList:any;
-productListOfCat:any;
+export class ProductComponent implements OnInit , OnChanges {
+
+ProductList!:Iproduct[];
+ productListOfCat:Iproduct[]=[];
 ProductID:any;
-@Input() sentCatID:number=0;
+@Input()resevedcategory!:string;
+@Input() resevedSortProductByPrice:any;
+@Output() sendproduct:EventEmitter<any>=new EventEmitter();
 
-  constructor(private service:ProductService)
+image = environment.imagesUrl + "Images/Products/";
+  constructor(private service:ProductService )
    {}
-  ngOnChange(){
-    // this.service.GetProductByCatID(this.sentCatID).subscribe(response =>{
-    //   this.productListOfCat=response.data;
-    //   console.log(this.productListOfCat);
-    // })
+
+  ngOnChanges(changes: SimpleChanges): void {
+      
+    // if( this.resevedcategory==='')
+    // {
+    //   this.productListOfCat=this.ProductList;
+    // }
+    // else
+    // this.productListOfCat=this.ProductList.filter(res=> res.category=== this.resevedcategory);
+    this.changecat()
+    this.sortPrice()
+    
   }
+   
+   
   ngOnInit(): void {
-
-    this.service.GetProduct().subscribe(response =>{
-      debugger
-      this.ProductList = response.data;
-      console.log(this.ProductList);
-  });
+  
+        this.getProducts();
+       
+  }
+  sortPrice(){
+    this.productListOfCat=this.resevedSortProductByPrice;
+  }
+  changecat(){
+    if( this.resevedcategory==='')
+    {
+      this.productListOfCat=this.ProductList;
+    }
+    else
+    this.productListOfCat=this.ProductList.filter(res=> res.category=== this.resevedcategory);
+  }
  
+  getProducts()
+  {
+    this.service.GetProduct().subscribe(response =>{
+      this.ProductList = response.data;
+      this.productListOfCat=response.data;
+  });
   }
-  // getPrdByID( id:any)
-  // {
-  //   this.service.GetProductID(this.id).subscribe(response =>{
-  //     this.ProductID = response.data;
-  //     console.log(this.ProductList);
-  // });
+ 
+  getPrdByID( id:number)
+  {
+    this.service.GetProductID(id).subscribe(response =>{
+      this.ProductID = response.data;
+      // console.log("productcategory");
+      console.log(this.ProductID);
+  });
 
   }
-
+  addItemToBasket(obj:any){
+   this.sendproduct.emit(obj);
+   console.log( obj)
+  }
+  addtocart(obj:any){}
+}

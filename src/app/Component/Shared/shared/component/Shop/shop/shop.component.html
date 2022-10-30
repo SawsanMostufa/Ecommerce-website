@@ -1,8 +1,4 @@
-<!-- 
-<app-category></app-category>
-<app-product></app-product> -->
 
-<!-- ********************************** -->
 
     <!-- Modal -->
     <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -29,18 +25,46 @@
 
             <div class="col-lg-3">
                 <h1 class="h2 pb-4">Categories</h1>
-                <ul class="list-unstyled templatemo-accordion">
-                    <li class="pb-3">
+                <!-- <ul class="list-unstyled templatemo-accordion" > -->
+                    <!--  [(ngModel)]="selectedCategory" -->
+                    <!-- <li class="pb-3">
                         <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                            Gender
+                            Select Category
                             <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
-                        </a>
-                        <ul class="collapse show list-unstyled pl-3">
-                            <li><a class="text-decoration-none" href="#">Men</a></li>
-                            <li><a class="text-decoration-none" href="#">Women</a></li>
+                        </a> -->
+                        <ul class="list-group my-3">
+                            <li class="list-group-item"  (click)="onCategorySelected('')">All Category</li>
+                            <li class="list-group-item" 
+                            *ngFor="let cat of categoryList"
+                            (click)="onCategorySelected(cat.name)"
+                            [value]="cat.name">
+                            {{cat.name}}
+                            </li>
+                          </ul>
+                          <!--    (click)="onCategorySelected(cat.id)" -->
+
+
+                        <!-- <ul class="collapse show list-unstyled pl-3" *ngFor="let cat of categoryList">
+                            <li class="text-decoration-none"
+                                (click)="onChlick(cat.id)"
+                                [value]="cat.id"
+                                 >{{cat.name}}</li> 
+                            
                         </ul>
-                    </li>
-                    <li class="pb-3">
+                    </li>-->
+
+                    <!-- <h5 class="text-warning ml-3">Categories</h5>
+                    <ul class="list-group my-3">
+                        <li class="list-group-item" 
+                        *ngFor="let cat of categoryList">
+                            {{cat.name}}
+                        </li>
+                      </ul> -->
+                    <!--  -------------------------- select ----------- -->
+                    <!-- <select>
+                        <option *ngFor="let cat of categoryList">{{cat.name}}</option>
+                    </select> -->
+                    <!-- <li class="pb-3">
                         <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                             Sale
                             <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
@@ -49,8 +73,8 @@
                             <li><a class="text-decoration-none" href="#">Sport</a></li>
                             <li><a class="text-decoration-none" href="#">Luxury</a></li>
                         </ul>
-                    </li>
-                    <li class="pb-3">
+                    </li> -->
+                    <!-- <li class="pb-3">
                         <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                             Product
                             <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
@@ -60,8 +84,8 @@
                             <li><a class="text-decoration-none" href="#">Sweather</a></li>
                             <li><a class="text-decoration-none" href="#">Sunglass</a></li>
                         </ul>
-                    </li>
-                </ul>
+                    </li> -->
+                <!-- </ul> -->
             </div>
 
             <div class="col-lg-9">
@@ -81,18 +105,26 @@
                     </div>
                     <div class="col-md-6 pb-4">
                         <div class="d-flex">
-                            <select class="form-control">
-                                <option>Featured</option>
-                                <option>A to Z</option>
-                                <option>Item</option>
+                            <select class="form-control"(change)="sortProductByPrice($event.target)">
+                                <!--  (change)="sortProductByPrice($event.target)" -->
+                                <option value="Name">A to Z</option>
+                                <option value="priceAsc">Price: low to high</option>
+                                <option value="priceDesc">Price: high to low</option>
+                                <!-- <option>Item</option> -->
                             </select>
                         </div>
                     </div>
                 </div>
+                <!-- -------------------------- -->
+                <!-- <select (change)="sortProductByPrice($event.target)" >
+                    <option selected value="undefined" disabled>Choose Category</option>
+                    <option value="l2h">Price: Low to High</option>
+                    <option value="h2l">Price: High to Low</option>
+                  </select> -->
 
      <!-- ---------------- products -------------------- -->
      
-                <app-product></app-product>
+                <app-product [resevedcategory]="categoryName" [resevedSortProductByPrice]="ProductList"></app-product>
 
   <!------------------------- pagenation----------------------- -->
 

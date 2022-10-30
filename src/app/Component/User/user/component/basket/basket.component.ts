@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-basket',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./basket.component.scss']
 })
 export class BasketComponent implements OnInit {
+  image = environment.imagesUrl + "Images/Products/";
 
   constructor() { }
-
+   @Input() basketitem:any;
   ngOnInit(): void {
   }
-
+  
 }

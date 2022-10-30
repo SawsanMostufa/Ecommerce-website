@@ -14,6 +14,9 @@ import { RegisterComponent } from './component/account/register/register.compone
 import { UserprofileComponent } from './component/account/userprofile/userprofile.component';
 import { RouterModule, Routes } from '@angular/router';
 import { UserShopComponent } from './component/user-shop/user-shop.component';
+import { CartComponent } from './component/cart/cart.component';
+import { ContactUsComponent } from './component/contact-us/contact-us.component';
+
 
 
 
@@ -29,7 +32,9 @@ const routes: Routes = [
   {path: 'checkoutreview', component:CheckoutReviewComponent},
   {path: 'cleckoutpayment', component:CheckoutPaymentComponent},
   {path: 'cleckoutsuccess', component:CheckoutSuccessComponent},
-  {path: 'productdetails', component:ProductDetailsComponent},
+  {path: 'productdetails/:id', component:ProductDetailsComponent},
+  {path:  'cart', component:CartComponent},
+  {path:  'contactUs', component:ContactUsComponent}
 
 
 
@@ -50,7 +55,10 @@ const routes: Routes = [
     ProductItemComponent,
     RegisterComponent,
     UserprofileComponent,
-    UserShopComponent
+    UserShopComponent,
+    CartComponent,
+    ContactUsComponent,
+   
   ],
   imports: [
     CommonModule,

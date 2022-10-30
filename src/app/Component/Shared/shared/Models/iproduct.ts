@@ -8,6 +8,7 @@ export interface Iproduct {
     discount: number;
     pictureUrl: string;
     category: string;
+    // categoryID:number;
     quantity: number;
     productSizes:Size[];
 }

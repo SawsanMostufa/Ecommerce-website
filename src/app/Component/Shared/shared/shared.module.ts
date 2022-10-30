@@ -17,6 +17,7 @@ import { ShopComponent } from './component/Shop/shop/shop.component';
 const routes: Routes = [
   
   {path: 'product', component:ProductComponent },
+  // {path: 'category', component:ProductComponent },
   {path: 'shop', component:ShopComponent }
 ];
 
