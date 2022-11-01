@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 
 import { Iproduct } from '../../Models/iproduct';
 import { productModel } from '../../Models/productModel';
+import { Size } from '../../Models/size';
 import { ProductService } from '../../Services/product.service';
 
 
@@ -22,22 +23,23 @@ ProductID:any;
 @Input()resevedcategory!:string;
 @Input() resevedSortProductByPrice:any;
 @Output() sendproduct:EventEmitter<any>=new EventEmitter();
-
+defaultSize:Size[]=[];
 image = environment.imagesUrl + "Images/Products/";
   constructor(private service:ProductService )
    {}
 
   ngOnChanges(changes: SimpleChanges): void {
       
-    // if( this.resevedcategory==='')
-    // {
-    //   this.productListOfCat=this.ProductList;
-    // }
-    // else
-    // this.productListOfCat=this.ProductList.filter(res=> res.category=== this.resevedcategory);
-    this.changecat()
-    this.sortPrice()
+    if( this.resevedcategory==='')
+    {
+      this.productListOfCat=this.ProductList;
+    }
+    else{
+          this.productListOfCat=this.ProductList.filter(res=> res.category=== this.resevedcategory);
+        }
     
+    this.productListOfCat=this.resevedSortProductByPrice;
+
   }
    
    
@@ -49,14 +51,14 @@ image = environment.imagesUrl + "Images/Products/";
   sortPrice(){
     this.productListOfCat=this.resevedSortProductByPrice;
   }
-  changecat(){
-    if( this.resevedcategory==='')
-    {
-      this.productListOfCat=this.ProductList;
-    }
-    else
-    this.productListOfCat=this.ProductList.filter(res=> res.category=== this.resevedcategory);
-  }
+  // changecat(){
+  //   if( this.resevedcategory==='')
+  //   {
+  //     this.productListOfCat=this.ProductList;
+  //   }
+  //   else
+  //   this.productListOfCat=this.ProductList.filter(res=> res.category=== this.resevedcategory);
+  // }
  
   getProducts()
   {
@@ -76,8 +78,14 @@ image = environment.imagesUrl + "Images/Products/";
 
   }
   addItemToBasket(obj:any){
+    debugger
+    obj.quantity=1;
+
+    this.defaultSize[0]=obj.productSizes[0];
+     obj.productSizes=this.defaultSize;
+     console.log(obj)
    this.sendproduct.emit(obj);
-   console.log( obj)
+//  console.log(obj)
   }
-  addtocart(obj:any){}
+  
 }

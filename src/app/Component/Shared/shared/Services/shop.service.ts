@@ -5,13 +5,7 @@ import { ShopParams } from '../Models/shop-params';
   providedIn: 'root'
 })
 export class ShopService {
-  // shopParams = new ShopParams();
+  
   constructor() { }
-  // setShopParams(params: ShopParams){
-  //   this.shopParams = params;
-  // }
 
-  // getShopParams(){
-  //   return this.shopParams;
-  // }
 }

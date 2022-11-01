@@ -5,11 +5,11 @@ export interface Iproduct {
     name: string;
     description: string;
     price: number;
-    discount: number;
+    // discount: number;
     pictureUrl: string;
     category: string;
-    // categoryID:number;
-    quantity: number;
+    categoryID:number;
+     quantity: number;
     productSizes:Size[];
 }
 

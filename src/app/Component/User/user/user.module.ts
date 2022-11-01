@@ -16,6 +16,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserShopComponent } from './component/user-shop/user-shop.component';
 import { CartComponent } from './component/cart/cart.component';
 import { ContactUsComponent } from './component/contact-us/contact-us.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -62,6 +63,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    FormsModule,
    RouterModule.forChild(routes)
     
   ],

@@ -105,9 +105,9 @@
                     </div>
                     <div class="col-md-6 pb-4">
                         <div class="d-flex">
-                            <select class="form-control"(change)="sortProductByPrice($event.target)">
+                            <select class="form-control"  (change)="sortProductByPrice($event.target)">
                                 <!--  (change)="sortProductByPrice($event.target)" -->
-                                <option value="Name">A to Z</option>
+                                <!-- <option value="Name">A to Z</option> -->
                                 <option value="priceAsc">Price: low to high</option>
                                 <option value="priceDesc">Price: high to low</option>
                                 <!-- <option>Item</option> -->
@@ -124,7 +124,8 @@
 
      <!-- ---------------- products -------------------- -->
      
-                <app-product [resevedcategory]="categoryName" [resevedSortProductByPrice]="ProductList"></app-product>
+                <app-product [resevedcategory]="categoryName" [resevedSortProductByPrice]="ProductList" (sendproduct)="addtocart($event)"></app-product>
+              
 
   <!------------------------- pagenation----------------------- -->
 

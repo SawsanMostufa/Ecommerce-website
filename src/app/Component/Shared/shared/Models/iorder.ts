@@ -17,6 +17,8 @@ export interface IOrderItem {
        
         productId: number;
         productName: string;
+        price:number;
+        quantity:number;
         productSizes:Size[];
         pictureUrl: string;
         category: string;

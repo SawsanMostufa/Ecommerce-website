@@ -16,31 +16,31 @@ export class BasketService {
   constructor(private httpClient:HttpClient) { }
 
 
-  checkProductQtyAva(product: Iproduct,qtyReq: number,size:string): any {
-    return  this.httpClient.get(this.baseUrl + 'Product/checkProductQtyAva?productId='+product.id+ '&qtyReq='+ qtyReq);
+  // checkProductQtyAva(product: Iproduct,qtyReq: number,size:string): any {
+  //   return  this.httpClient.get(this.baseUrl + 'Product/checkProductQtyAva?productId='+product.id+ '&qtyReq='+ qtyReq);
      
   }
-  addItemToBasket(item: Iproduct,  quantity = 1, size:string){
-    const itemToAdd: IOrderItem = this.mapPRoductItemToBasketItems(item, quantity,size);
+  // addItemToBasket(item: Iproduct,  quantity = 1, size:string){
+  //   const itemToAdd: IOrderItem = this.mapPRoductItemToBasketItems(item, quantity,size);
    
     // const basket = this.getCurrentBasketValue() ??  this.createBasket();
    
     // basket.items = this.addOrUpdateItems(basket.items, itemToAdd, quantity);
     // this.setBasket(basket);
     // console.log(basket.items);
-  }
-  private mapPRoductItemToBasketItems(item:  Iproduct, quantity: number, size:string): IOrderItem {
-    // console.log(item.productSizes);
+  //}
+  // private mapPRoductItemToBasketItems(item:  Iproduct, quantity: number, size:string): IOrderItem {
+  //   // console.log(item.productSizes);
     
-    return {
-      productId: item.id,
-      productName: item.name,
-      productSizes:item.productSizes,
-      pictureUrl: item.pictureUrl,
-      category: item.category,
-    };
+  //   return {
+  //     productId: item.id,
+  //     productName: item.name,
+  //     productSizes:item.productSizes,
+  //     pictureUrl: item.pictureUrl,
+  //     category: item.category,
+  //   };
 
-  }
+  // }
   
  
 
@@ -60,11 +60,11 @@ export class BasketService {
   //   localStorage.setItem('cart', JSON.stringify(data)); 
   // }
 
-  getCurrentBasketValue(){
+  // getCurrentBasketValue(){
     
-    return localStorage.getItem('cart');
+  //   return localStorage.getItem('cart');
 
-  }
+  // }
 
   // private createBasket(): IOrderToCreate {
   //   const basket = new Basket();
@@ -79,4 +79,4 @@ export class BasketService {
       // this.calculateTotals();
     // }
   // }
-}
+//}

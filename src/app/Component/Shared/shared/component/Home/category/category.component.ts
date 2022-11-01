@@ -24,7 +24,7 @@ export class CategoryComponent implements OnInit {
   ngOnInit(): void {
      this.service.GetAllCategories().subscribe(cat =>{
       this.category=cat;
-      console.log(this.category)
+      //console.log(this.category)
   });
 }
   
@@ -32,7 +32,7 @@ export class CategoryComponent implements OnInit {
  {
   this.service.GetCategoryByID(id).subscribe(cat =>{
     this.categoryid=cat;
-    console.log(this.categoryid);
+    //console.log(this.categoryid);
  });
     
 }

@@ -11,7 +11,9 @@ export class BasketComponent implements OnInit {
 
   constructor() { }
    @Input() basketitem:any;
+  //  total:any=0;
   ngOnInit(): void {
   }
   
+ 
 }

@@ -6,6 +6,8 @@ import { productModel } from 'src/app/Component/Shared/shared/Models/productMode
 import { BasketService } from 'src/app/Component/Shared/shared/Services/basket.service';
 import { ProductService } from 'src/app/Component/Shared/shared/Services/product.service';
 import { environment } from 'src/environments/environment';
+import { Basket } from 'src/app/Component/Shared/shared/Models/basket';
+import { Size } from 'src/app/Component/Shared/shared/Models/size';
 
 @Component({
   selector: 'app-product-details',
@@ -20,11 +22,14 @@ export class ProductDetailsComponent implements OnInit {
   quantity = 1;
   SizeId!:number;
   Sizevalue:any;
-  price:any;
+  selectSize:any;
   discount!:number;
   defaultprice:number=0;
   sizeobj:any={};
  mapped:any=[];
+ quantities:number=1;
+ defaultSize:Size[]=[];
+  cartproducts:any[]=[];
   constructor(private router:Router, private productService:ProductService , 
     private basketService:BasketService,
      private activateRoute: ActivatedRoute) { }
@@ -39,23 +44,88 @@ export class ProductDetailsComponent implements OnInit {
         this.product=this.productdetails
         console.log('this.product')
         console.log(this.productdetails)
-    })
+    });
+  
+    // this.addItemToCart();
+    //  this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
+    //  console.log( 'this.cartproducts')
+    //  console.log( this.cartproducts)
 
+  }
+
+  decrementQuantity(){
+    if(this.quantity > 1){
+      this.quantity--;
+    }
     
   }
 
+  incrementQuantity(){
+      this.quantity++;
+     
+    }
+ 
    
    onChange(event:any) {
   
     // debugger
      this.Sizevalue=this.product.productSizes.filter(siz => siz.value === event.target.value);
-    
-     this.price= this.Sizevalue[0].price;
-     this.discount= this.Sizevalue[0].discount;
+      this.selectSize= this.Sizevalue[0].value;
+
+     
    
-     this.defaultprice=1;
+    //  this.defaultprice=1;
    
 }
+
+ addItemToCart()
+ {
+  debugger
+  this.product.quantity=this.quantity;
+  if(this.Sizevalue == null)
+  {
+    
+    this.defaultSize[0]=this.product.productSizes[0];
+    this.product.productSizes=this.defaultSize;
+    
+  }
+  else{
+     this.product.productSizes[0]=this.Sizevalue[0];
+    
+  }
+  if('cart' in localStorage)
+ {
+  
+   this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
+   let exist=this.cartproducts.find(item=>item.id == this.product.id)
+   if(exist){
+    alert('this is already in your cart')
+   }
+   else{
+    this.cartproducts.push(this.product)
+    localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+   }
+   
+   }
+    else{
+      this.cartproducts.push(this.product)
+      localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+
+}
+  
+}
+
+
+}
+// minsAmount(index:number){
+//   // debugger
+//    this.product.productSizes[index].quantity--;
+//     localStorage.setItem('cart',JSON.stringify(this.cartproductts))
+// }
+// addAmount(index:number){
+//   this.product.productSizes[index].quantity++;
+//   localStorage.setItem('cart',JSON.stringify(this.cartproductts))
+// }
 
 // addItemToBasket(){
 //   debugger
@@ -96,10 +166,5 @@ export class ProductDetailsComponent implements OnInit {
   
 // }
 
-// onChange(Value) {
-//   this.Sizevalue=this.product.productSizes.filter(siz => siz.value === Value);
- 
- 
- 
-// }
-}
+
+//}
