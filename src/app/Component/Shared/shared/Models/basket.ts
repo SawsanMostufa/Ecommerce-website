@@ -10,3 +10,7 @@ export interface Basket {
     pictureUrl: string;
     category: string;
 }
+export interface IBasket {
+    id: string;
+    items: Basket[];
+}

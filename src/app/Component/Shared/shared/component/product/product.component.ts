@@ -79,11 +79,11 @@ image = environment.imagesUrl + "Images/Products/";
   }
   addItemToBasket(obj:any){
     debugger
-    obj.quantity=1;
+    // obj.quantity=1;
 
     this.defaultSize[0]=obj.productSizes[0];
      obj.productSizes=this.defaultSize;
-     console.log(obj)
+    //  console.log(obj)
    this.sendproduct.emit(obj);
 //  console.log(obj)
   }

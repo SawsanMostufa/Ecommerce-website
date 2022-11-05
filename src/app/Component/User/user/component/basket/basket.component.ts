@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges,OnChanges } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -8,12 +8,18 @@ import { environment } from 'src/environments/environment';
 })
 export class BasketComponent implements OnInit {
   image = environment.imagesUrl + "Images/Products/";
-
-  constructor() { }
-   @Input() basketitem:any;
-  //  total:any=0;
-  ngOnInit(): void {
-  }
+  recevedTotalPrice:any;
   
- 
+  constructor() { }
+  
+   ngOnChanges(changes: SimpleChanges): void {
+    
+    }
+  ngOnInit(): void {
+    
+  }
+  updateTotalPrice(totalPrice:number )
+  {
+    this.recevedTotalPrice=totalPrice;
+  }
 }

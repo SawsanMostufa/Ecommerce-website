@@ -1,5 +1,5 @@
 import { isNgTemplate } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Iproduct } from 'src/app/Component/Shared/shared/Models/iproduct';
 import { productModel } from 'src/app/Component/Shared/shared/Models/productModel';
@@ -15,156 +15,138 @@ import { Size } from 'src/app/Component/Shared/shared/Models/size';
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
-  product!:Iproduct;
- productdetails:any;
-  id:any;
-  image = environment.imagesUrl + "Images/Products/";
+  product!: Iproduct;
+  productdetails: any;
+  id: any;
+  countCart: any[] = [];
+  cartItem: number = 0;
+  image = environment.imagesUrl + "Images/Products/"; 
+  cartproducts: any[] = [];
   quantity = 1;
-  SizeId!:number;
-  Sizevalue:any;
-  selectSize:any;
-  discount!:number;
-  defaultprice:number=0;
-  sizeobj:any={};
- mapped:any=[];
- quantities:number=1;
- defaultSize:Size[]=[];
-  cartproducts:any[]=[];
-  constructor(private router:Router, private productService:ProductService , 
-    private basketService:BasketService,
-     private activateRoute: ActivatedRoute) { }
-    //  private router:Router,,private _location: Location
-  ngOnInit(): void {
-    this.activateRoute.paramMap.subscribe({next:(pramas:ParamMap)=>{this.id=pramas.get("id");},
-    error:(err)=>{throw new Error(err)}})
-    this.productService.GetProductID(this.id).subscribe(res=>
-      {
-        // debugger
-        this.productdetails=  res
-        this.product=this.productdetails
-        console.log('this.product')
-        console.log(this.productdetails)
-    });
-  
-    // this.addItemToCart();
-    //  this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
-    //  console.log( 'this.cartproducts')
-    //  console.log( this.cartproducts)
+  index: any;
+ProductObj:any;
+  cartItems: number = 0;
+  constructor(private router: Router, private productService: ProductService,
+    private basketService: BasketService,
+    private activateRoute: ActivatedRoute) { }
+  //  private router:Router,,private _location: Location
+
+  ngOnChanges(): void {
 
   }
+  ngOnInit(): void {
+    this.activateRoute.paramMap.subscribe({
+      next: (pramas: ParamMap) => { this.id = pramas.get("id"); },
+      error: (err) => { throw new Error(err) }
+    })
+    this.productService.GetProductID(this.id).subscribe(res => {
+      // debugger
+      this.productdetails = res
+      this.product = this.productdetails
+      this.ProductObj=this.productdetails;
+    });
+   
+    
+  }
+  cartItemNumber() {
 
-  decrementQuantity(){
-    if(this.quantity > 1){
+    if ('cart' in localStorage) {
+
+      this.countCart = JSON.parse(localStorage.getItem('cart')!)
+      this.cartItem = this.countCart.length;
+      this.basketService.cartSubject.next(this.cartItem);
+    }
+  }
+
+  decrementQuantity() {
+    if (this.quantity > 1) {
       this.quantity--;
     }
-    
+
   }
 
-  incrementQuantity(){
-      this.quantity++;
+  incrementQuantity() {
+    // this.checkProductQtyAva()
+    this.quantity++;
+
+  }
+
+
+  addItemToCart () {
+    debugger
      
-    }
+        
+       // console.log( this.product.quantity)
+    this.basketService.checkProductQtyAva(this.product, this.quantity)
+      .subscribe((response: any) => {
+        debugger
+         
+
+        if (response.message == "Quantity not available in stock" && response.status == false) {
+          alert("Quantity not available in stock");
+        }
+        if (response.message == "Quantity request greater than in stock" && response.status == false) {
+          alert("Quantity request greater than in stock");
+        }
+        if (response.message == "Quantity available" && response.status == true) 
+        {
+           
+            // this.product.quantity = this.quantity;
+            
+            this.checkProductQtyAva()
+              // this.cartItem= this.basketService.cartItemNumber() ;
+            debugger
+            this.basketService.cartSubject.next(this.cartItem);
+             //this.cartItems = this.basketService.cartItemNumber() ;
+        }
+           
+      });
+
+
+  }
+     checkProductQtyAva() {
  
-   
-   onChange(event:any) {
-  
-    // debugger
-     this.Sizevalue=this.product.productSizes.filter(siz => siz.value === event.target.value);
-      this.selectSize= this.Sizevalue[0].value;
+       console.log(this.ProductObj)
+    if ('cart' in localStorage) {
 
+      this.cartproducts = JSON.parse(localStorage.getItem('cart')!)
+
+      let exist = this.cartproducts.find(item => item.id == this.product.id)
      
-   
-    //  this.defaultprice=1;
-   
-}
+      if (exist) {
+               
+         this.index = this.cartproducts.findIndex(x => x.id === this.product.id);
+        if(this.cartproducts[this.index].quantity + this.quantity <= this.ProductObj.quantity)
+        {
+          this.cartproducts[this.index].quantity += this.quantity;
+          localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+           alert("Product added in your basket");
 
- addItemToCart()
- {
-  debugger
-  this.product.quantity=this.quantity;
-  if(this.Sizevalue == null)
-  {
-    
-    this.defaultSize[0]=this.product.productSizes[0];
-    this.product.productSizes=this.defaultSize;
-    
-  }
-  else{
-     this.product.productSizes[0]=this.Sizevalue[0];
-    
-  }
-  if('cart' in localStorage)
- {
-  
-   this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
-   let exist=this.cartproducts.find(item=>item.id == this.product.id)
-   if(exist){
-    alert('this is already in your cart')
-   }
-   else{
-    this.cartproducts.push(this.product)
-    localStorage.setItem('cart',JSON.stringify(this.cartproducts))
-   }
-   
-   }
-    else{
+        }
+        else{
+          alert("Quantity request greater than in stock");
+
+        }
+
+      }
+      else {
+        this.product.quantity = this.quantity;
+        this.cartproducts.push(this.product)
+        localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+        alert("Product added in your basket");
+
+      }
+
+    }
+    else {
+      this.product.quantity = this.quantity;
       this.cartproducts.push(this.product)
-      localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+      localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+      alert("Product added in your basket");
+
+    }
+
+  }
 
 }
-  
-}
 
-
-}
-// minsAmount(index:number){
-//   // debugger
-//    this.product.productSizes[index].quantity--;
-//     localStorage.setItem('cart',JSON.stringify(this.cartproductts))
-// }
-// addAmount(index:number){
-//   this.product.productSizes[index].quantity++;
-//   localStorage.setItem('cart',JSON.stringify(this.cartproductts))
-// }
-
-// addItemToBasket(){
-//   debugger
-//   this.basketService.checkProductQtyAva(this.product, this.quantity,this.Sizevalue )
-//   .subscribe((response: any) => {
-//     debugger
-
-//     if(this.defaultprice==0){
-//       this.sizeobj=this.product.productSizes[0]; 
-//       this.mapped[0] =this.sizeobj;
-//       this.Sizevalue=this.mapped;
-
-//     }
-//      this.product.productSizes=this.Sizevalue;
-    
-//     setTimeout(() => {
-//       if(response.message == "Quantity not available in stock" && response.status == false){
-//         this.toaster.error("Quantity not available in stock");
-//       }
-//       if(response.message == "Quantity request greater than in stock" && response.status == false){
-//         this.toaster.error("Quantity request greater than in stock");
-//       }
-//       if(response.message == "Quantity available" && response.status == true){
-//         this.basketService.addItemToBasket(this.product, this.quantity,this.Sizevalue);
-//      this.basketService.addItemToBasket(this.product, this.quantity,this.Sizevalue);
-
-//         this.toaster.success("Product added in your basket");
-//         //this.cardService.addToCart(this.product);
-//       }
-//     }, 50);
-//   }, (err: any) => {
-//     setTimeout(() => {
-//       this.toaster.error("Server response error");
-//     }, 50);
-//   }, () => {
-//     //final
-//   });
-  
-// }
-
-
-//}

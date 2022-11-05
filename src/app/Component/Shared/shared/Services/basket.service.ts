@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Basket } from '../Models/basket';
+import { Basket, IBasket } from '../Models/basket';
 import { Iproduct } from '../Models/iproduct';
 import { Size } from '../Models/size';
-import{IOrderItem,IOrderToCreate}from'../Models/iorder';
+import { IOrderItem, IOrderToCreate } from '../Models/iorder';
+import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,71 +14,74 @@ import{IOrderItem,IOrderToCreate}from'../Models/iorder';
 export class BasketService {
   // public cartItemList = new BehaviorSubject<any>([]);
   // private basketSource = new BehaviorSubject<Basket>(null);
-   baseUrl = 'http://localhost:40029/api/';
-  constructor(private httpClient:HttpClient) { }
+
+  countCart: any[] = [];
+  cartItem: number = 0;
+  product!: Iproduct;
+  quantity = 1;
+  cartproducts: any[] = [];
+  index: any;
+  count: number = 0;
+  id: any;
+  cartSubject = new Subject<any>();
+
+  constructor(private httpClient: HttpClient) { }
 
 
-  // checkProductQtyAva(product: Iproduct,qtyReq: number,size:string): any {
-  //   return  this.httpClient.get(this.baseUrl + 'Product/checkProductQtyAva?productId='+product.id+ '&qtyReq='+ qtyReq);
-     
+  checkProductQtyAva(product: Iproduct, qtyReq: number): any {
+    debugger
+    return this.httpClient.get(`${environment.baseUrl}Product/checkProductQtyAva?productId=` + product.id + '&qtyReq=' + qtyReq);
   }
-  // addItemToBasket(item: Iproduct,  quantity = 1, size:string){
-  //   const itemToAdd: IOrderItem = this.mapPRoductItemToBasketItems(item, quantity,size);
-   
-    // const basket = this.getCurrentBasketValue() ??  this.createBasket();
-   
-    // basket.items = this.addOrUpdateItems(basket.items, itemToAdd, quantity);
-    // this.setBasket(basket);
-    // console.log(basket.items);
-  //}
-  // private mapPRoductItemToBasketItems(item:  Iproduct, quantity: number, size:string): IOrderItem {
-  //   // console.log(item.productSizes);
-    
-  //   return {
-  //     productId: item.id,
-  //     productName: item.name,
-  //     productSizes:item.productSizes,
-  //     pictureUrl: item.pictureUrl,
-  //     category: item.category,
-  //   };
-
-  // }
   
- 
+  cartItemNumber() {
 
-  // getProducts(): Observable<any>{
-  //   let cartLocalStorage = localStorage.getItem('cart'); 
-  //   if(cartLocalStorage){                                  
-  //     //return Observable.of(cartLocalStorage);
-  //     this.cartItemList.next(cartLocalStorage);
-  //     return this.cartItemList.asObservable();
-  //   }
-  //   else{
-  //     return this.cartItemList.asObservable();
-  //   } 
-  // }
+    if ('cart' in localStorage) {
 
-  // setProduct(data: any){
-  //   localStorage.setItem('cart', JSON.stringify(data)); 
-  // }
+      this.countCart = JSON.parse(localStorage.getItem('cart')!)
+      return this.cartItem = this.countCart.length;
 
-  // getCurrentBasketValue(){
-    
-  //   return localStorage.getItem('cart');
+    }
 
-  // }
+    return 0;
+  }
 
-  // private createBasket(): IOrderToCreate {
-  //   const basket = new Basket();
-  //   //localStorage.setItem('basket_id',basket.id);
-  //   return basket;
-  // }
-  // getBasket(){
-  //   let cartLocalStorage = localStorage.getItem('basket');
-  //   if(cartLocalStorage){
-      //return Observable.of(cartLocalStorage);
-      // this.basketSource.next(cartLocalStorage);
-      // this.calculateTotals();
-    // }
-  // }
-//}
+  getAndSetItemFromBasket() {
+
+    if ('cart' in localStorage) {
+
+      this.cartproducts = JSON.parse(localStorage.getItem('cart')!)
+      let exist = this.cartproducts.find(item => item.id == this.product.id)
+      if (exist) {
+        this.index = this.cartproducts.findIndex(x => x.id === this.product.id);
+
+        this.cartproducts[this.index].quantity += this.quantity;
+        localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+      }
+      else {
+        this.cartproducts.push(this.product)
+        localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+      }
+
+    }
+    else {
+      this.cartproducts.push(this.product)
+      this.setItemInBasket();
+    }
+
+  }
+
+  getCurrentBasketValue() {
+
+    return JSON.parse(localStorage.getItem('cart')!)
+  }
+
+  setItemInBasket() {
+    localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+  }
+
+}
+
+
+
+
+

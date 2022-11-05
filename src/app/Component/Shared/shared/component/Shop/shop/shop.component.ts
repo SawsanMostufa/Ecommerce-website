@@ -19,14 +19,16 @@ import { ShopService } from '../../../Services/shop.service';
 export class ShopComponent implements OnInit , OnChanges {
   categoryList:Icategory[]=[];
   categoryName!:string;
-  // ProductList:any;
+  exist:any;
   ProductList!:Iproduct[];
   sortProductPrice:any;
   cartproducts:any[]=[];
+  quantity = 1;
+  index:any;
   // cartproducts:Basket[]=[];
-
+  ProductObj:any
   // public cartItemList = new BehaviorSubject<any>([]);
-  // baseUrl = 'http://localhost:40029/api/';
+ 
   
   constructor( private categoryservice:CategoryService, 
     private shopService:ShopService ,
@@ -46,7 +48,7 @@ export class ShopComponent implements OnInit , OnChanges {
           });
       // this.getProducts()
     //  this.sortProductByPrice();
-                                                   
+    // this.ProductObj=this.productdetails;                                          
 }
 
 
@@ -58,6 +60,7 @@ sortProductByPrice(option:any)
 {
   this.productservice.GetProduct().subscribe(response =>{
     this.ProductList = response.data
+    this.ProductObj=this.ProductList;
   //  this.ProductList.forEach(element => {
   //         element.productSizes.sort((a,b) => a.price - b.price) 
   //      });
@@ -74,26 +77,77 @@ sortProductByPrice(option:any)
 
 }
 
+// addItemToCartCheckQuantity()
+// {
+//  debugger
+//  this.product.quantity=this.quantity;
+
+//  this.basketService.checkProductQtyAva(this.product,this.quantity)
+//  .subscribe((response: any) => {
+//           debugger
+//        if(response.message == "Quantity not available in stock" && response.status == false){
+//            alert("Quantity not available in stock");
+//        }
+//        if(response.message == "Quantity request greater than in stock" && response.status == false){
+//           alert("Quantity request greater than in stock");
+//        }
+//        if(response.message == "Quantity available" && response.status == true){
+
+//                  // this.basketService.getAndSetItemFromBasket();
+//                      this. addtocart()
+//                      // this.cartItem= this.basketService.cartItemNumber() ;
+//                          debugger
+//           this.basketService.cartSubject.next(this.cartItem);
+//           //this.cartItems = this.basketService.cartItemNumber() ;
+//        }
+    
+//    });
+   
+ 
+ 
+
+//  }
+
+
+
 addtocart(event:any){
+  debugger
  if('cart' in localStorage)
  {
   debugger
    this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
-   let exist=this.cartproducts.find(item=>item.id == event.id)
-   if(exist){
-    alert('this is already in your cart')
+    this.exist=this.cartproducts.find(item=>item.id == event.id)
+   if (this.exist) {
+               
+    this.index = this.cartproducts.findIndex(x => x.id === this.exist.id);
+   if((this.cartproducts[this.index].quantity + 1) <= event.quantity)
+   {
+     this.cartproducts[this.index].quantity += 1;
+     localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+      alert("Product added in your basket");
+
    }
    else{
+     alert("Quantity request greater than in stock");
+     }
+    }
+   else{
+    event.quantity=1;
     this.cartproducts.push(event)
     localStorage.setItem('cart',JSON.stringify(this.cartproducts))
-   }
+    alert("Product added in your basket");
+        }
    
    }
     else{
+      event.quantity=1;
       this.cartproducts.push(event)
       localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+      alert("Product added in your basket");
 
-}
+       }
+       
+  
 } 
 }
 

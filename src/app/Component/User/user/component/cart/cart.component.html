@@ -1,6 +1,10 @@
-<ng-container >
 
-    <div class="table-responsive">
+     <div class="col-12 py-5 mb-1">
+        
+        <button  type="button" class="btn btn-success" (click)="clearCart()">Clear Cart</button>
+    </div>
+<ng-container >
+    <div class="table-responsive ">
         <table class="table">
             <thead>
                 <th scope="col" >
@@ -46,7 +50,7 @@
                      <!-- <td class="align-middle"> </td> -->
                     <td class="align-middle">
                          <ul> 
-                            <li *ngFor="let productsize of item.productSizes">{{productsize.value}}</li>
+                            <li>{{item.productSizes[0].value}}</li>
                         </ul>
                        
                   </td>
@@ -58,9 +62,12 @@
                     </td>
 
                     <td class="align-middle">
-                        
-                                {{item.quantity}}
-                      
+                                 <!-- {{item.quantity}}  -->
+                               
+                                    <i (click)="decrementQuantity(index)" class="fa fa-minus-circle text-warning mr-2" style="cursor: pointer;font-size: 2em;"></i>
+                                    <span class="font-weight-bold" style="font-size: 1.5em;"> {{item.quantity}}</span>
+                                    <i  (click)="incrementQuantity(index)"  class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer;font-size: 2em;"></i>
+                                  
                     </td>
 
                     <td class="align-middle">
@@ -85,4 +92,3 @@
     </div>
 
 </ng-container>
-
