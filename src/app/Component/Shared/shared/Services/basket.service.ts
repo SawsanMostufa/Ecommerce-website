@@ -78,10 +78,23 @@ export class BasketService {
   setItemInBasket() {
     localStorage.setItem('cart', JSON.stringify(this.cartproducts))
   }
+   mapPRoductItemToBasketItems(item: Iproduct, quantity: number): Basket {
+    // console.log(item.productSizes);
+    
+    return {
+      productId: item.id,
+      productName: item.name,
+      price: item.price,
+
+      productSizes:item.productSizes,
+      // size:
+      pictureUrl: item.pictureUrl,
+      quantity,
+      category: item.category
+    };
+
+  }
+
 
 }
-
-
-
-
 
