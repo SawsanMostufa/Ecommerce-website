@@ -14,7 +14,11 @@ export class AccountService {
   login(user: any){
     debugger
     return this.http.post(this.baseUrl + 'account/login', user)
-       
+    // if(user){
+    // localStorage.setItem("token",user.token);
+   
+      
+    // }
   }
 
   register(user: any){

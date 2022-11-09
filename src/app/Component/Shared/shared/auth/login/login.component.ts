@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators,FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Login } from '../../Models/login';
 import { AccountService } from '../../Services/account.service';
 
 @Component({
@@ -31,8 +32,9 @@ export class LoginComponent implements OnInit {
   }
   onSubmit() {
     debugger
-    this.accountService.login(this.loginForm.value).subscribe(() => {
-      
+    this.accountService.login(this.loginForm.value).subscribe(
+      (res:any) => {
+        localStorage.setItem("token",res.token);
       this.router.navigateByUrl(this.returnUrl)
       alert('login is success')
   });
