@@ -12,15 +12,19 @@ import { CategoryComponent } from './component/Home/category/category.component'
 import { ProductComponent } from './component/product/product.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ShopComponent } from './component/Shop/shop/shop.component';
+import { PagerComponent } from './component/Home/pager/pager.component';
+import { SpinnerComponent } from './component/spinner/spinner.component';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 
 // import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [
   
   {path: 'product', component:ProductComponent },
-  // {path: 'category', component:ProductComponent },
-  {path: 'shop', component:ShopComponent }
-];
+  {path: 'shop', component:ShopComponent },
+  {path: 'login', component:LoginComponent}, 
 
+
+];
 //shared/product
 @NgModule({
   declarations: [
@@ -35,13 +39,18 @@ const routes: Routes = [
     CategoryComponent,
     ProductComponent,
     ShopComponent,
+    PagerComponent,
+    SpinnerComponent,
    
   
  
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
+    
   //  HttpClientModule
    
   ],

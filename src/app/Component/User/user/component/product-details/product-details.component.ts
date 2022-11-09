@@ -21,11 +21,12 @@ export class ProductDetailsComponent implements OnInit {
   countCart: any[] = [];
   cartItem: number = 0;
   image = environment.imagesUrl + "Images/Products/"; 
-  cartproducts: any[] = [];
+  cartproducts: Basket[] = [];
   quantity = 1;
   index: any;
 ProductObj:any;
   cartItems: number = 0;
+  basketList!:Basket;
   constructor(private router: Router, private productService: ProductService,
     private basketService: BasketService,
     private activateRoute: ActivatedRoute) { }
@@ -102,45 +103,41 @@ ProductObj:any;
            
       });
 
-
   }
+
      checkProductQtyAva() {
- 
-       console.log(this.ProductObj)
+    this.basketList= this.basketService.mapPRoductItemToBasketItems(this.product,this.quantity)
+
     if ('cart' in localStorage) {
 
       this.cartproducts = JSON.parse(localStorage.getItem('cart')!)
 
-      let exist = this.cartproducts.find(item => item.id == this.product.id)
+      let exist = this.cartproducts.find(item => item.productId == this.product.id)
      
       if (exist) {
                
-         this.index = this.cartproducts.findIndex(x => x.id === this.product.id);
+         this.index = this.cartproducts.findIndex(x => x.productId === this.product.id);
         if(this.cartproducts[this.index].quantity + this.quantity <= this.ProductObj.quantity)
         {
           this.cartproducts[this.index].quantity += this.quantity;
           localStorage.setItem('cart', JSON.stringify(this.cartproducts))
            alert("Product added in your basket");
-
         }
         else{
           alert("Quantity request greater than in stock");
-
         }
-
       }
       else {
         this.product.quantity = this.quantity;
-        this.cartproducts.push(this.product)
+
+        this.cartproducts.push( this.basketList)
         localStorage.setItem('cart', JSON.stringify(this.cartproducts))
         alert("Product added in your basket");
-
       }
-
     }
     else {
       this.product.quantity = this.quantity;
-      this.cartproducts.push(this.product)
+      this.cartproducts.push( this.basketList)
       localStorage.setItem('cart', JSON.stringify(this.cartproducts))
       alert("Product added in your basket");
 

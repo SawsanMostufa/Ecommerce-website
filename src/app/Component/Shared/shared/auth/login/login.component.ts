@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators,FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AccountService } from '../../Services/account.service';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +9,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  constructor() { }
+  loginForm!: FormGroup;
+  returnUrl!:string;
+  constructor( private fb:FormBuilder, private accountService:AccountService,
+                private router: Router) { }
 
   ngOnInit(): void {
+   this.createLoginForm()
   }
-
+ createLoginForm() {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]),
+      password: new FormControl('', Validators.required)
+   });
+ }
+  get email(){
+    return this.loginForm.get('email')
+  }
+  get password(){
+    return this.loginForm.get('password')
+  }
+  onSubmit() {
+    debugger
+    this.accountService.login(this.loginForm.value).subscribe(() => {
+      
+      this.router.navigateByUrl(this.returnUrl)
+      alert('login is success')
+  });
+}
 }

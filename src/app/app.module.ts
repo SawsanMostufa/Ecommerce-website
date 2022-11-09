@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './Component/Shared/shared/shared.module';
 import { AdminModule } from './Component/Admin/component/admin/admin.module';
 import { AdminRoutingModule } from './Component/Admin/component/admin/admin-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 
@@ -25,6 +25,8 @@ import { CommonModule } from '@angular/common';
     AdminRoutingModule,
     FormsModule,
    CommonModule,
+   ReactiveFormsModule,
+  //  NgModel
    
   ],
   providers: [],

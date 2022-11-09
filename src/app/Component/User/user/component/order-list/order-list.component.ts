@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Iorder } from 'src/app/Component/Shared/shared/Models/iorder';
+import { OrderService } from 'src/app/Component/Shared/shared/Services/order.service';
 
 @Component({
   selector: 'app-order-list',
@@ -7,9 +10,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderListComponent implements OnInit {
 
-  constructor() { }
+  orders: Iorder[] = [];
+  constructor( private orderService:OrderService,  private router: Router) { }
 
   ngOnInit(): void {
+    this. getOrders()
   }
+
+
+  getOrders()
+  {
+    this.orderService.getOrders().subscribe((response:any[]) =>{
+      this.orders=response;
+      console.log(this.orders)
+    })
+  }
+
+  // goToOrderDetails(order){
+  //   this.router.navigate(['orders/', + order.id] );
+  // }
 
 }

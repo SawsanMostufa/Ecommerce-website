@@ -4,6 +4,7 @@ import { HomeComponent } from './Component/Shared/shared/component/Home/home/hom
 import { NotFoundComponent } from './Component/Shared/shared/component/not-found/not-found.component';
 
 const routes: Routes = [
+  // {}
       {path: '', component:HomeComponent },
       {path: 'home', component:HomeComponent },
       {path: 'admin',loadChildren: () => import('src/app/Component/Admin/component/admin/admin.module')

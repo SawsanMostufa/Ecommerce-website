@@ -19,13 +19,13 @@ import { ShopService } from '../../../Services/shop.service';
 export class ShopComponent implements OnInit , OnChanges {
   categoryList:Icategory[]=[];
   categoryName!:string;
-  exist:any;
+  exist!:any;
   ProductList!:Iproduct[];
   sortProductPrice:any;
-  cartproducts:any[]=[];
+  cartproducts:Basket[]=[];
   quantity = 1;
   index:any;
-  // cartproducts:Basket[]=[];
+  basketList!:Basket;
   ProductObj:any
   // public cartItemList = new BehaviorSubject<any>([]);
  
@@ -112,15 +112,17 @@ sortProductByPrice(option:any)
 
 addtocart(event:any){
   debugger
+  this.basketList= this.basketService.mapPRoductItemToBasketItems(event, 1)
+
  if('cart' in localStorage)
  {
   debugger
    this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
-    this.exist=this.cartproducts.find(item=>item.id == event.id)
+    this.exist=this.cartproducts.find(item=>item.productId == this.basketList.productId)
    if (this.exist) {
                
-    this.index = this.cartproducts.findIndex(x => x.id === this.exist.id);
-   if((this.cartproducts[this.index].quantity + 1) <= event.quantity)
+    this.index = this.cartproducts.findIndex(x => x.productId === this.exist.productId);
+   if((this.cartproducts[this.index].quantity + 1) <=  event.quantity)
    {
      this.cartproducts[this.index].quantity += 1;
      localStorage.setItem('cart', JSON.stringify(this.cartproducts))
@@ -133,7 +135,7 @@ addtocart(event:any){
     }
    else{
     event.quantity=1;
-    this.cartproducts.push(event)
+    this.cartproducts.push(this.basketList)
     localStorage.setItem('cart',JSON.stringify(this.cartproducts))
     alert("Product added in your basket");
         }
@@ -141,7 +143,7 @@ addtocart(event:any){
    }
     else{
       event.quantity=1;
-      this.cartproducts.push(event)
+      this.cartproducts.push(this.basketList)
       localStorage.setItem('cart',JSON.stringify(this.cartproducts))
       alert("Product added in your basket");
 

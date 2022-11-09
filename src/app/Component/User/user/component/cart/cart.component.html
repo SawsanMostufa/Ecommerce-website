@@ -29,7 +29,7 @@
 
             </thead>
             <tbody>
-                <tr *ngFor="let item of cartproduct let index=index" >
+                <tr *ngFor="let item of cartproducts let index=index" >
                     <th scope="row">
                         <div class="p-2">
                             <img  src="{{imageUrl + item.pictureUrl}}" alt="{{item.productName}}" class="img-fluid"
@@ -37,7 +37,7 @@
                             <div class="ml-3 d-inline-block align-middle">
                                 <h5 class="mb-0" style="font-size: 18px;">
                                     <a  class="text-dark">
-                                        {{item.productName}}
+                                        <!-- {{item.productName}} -->
                                     </a>
                                 </h5>
                                 <span  class="text-muted font-weight-normal font-italic d-block" style="font-size: 12px;">
@@ -92,3 +92,6 @@
     </div>
 
 </ng-container>
+<div style="background-color: red;">
+    
+</div>

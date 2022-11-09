@@ -23,8 +23,7 @@ image = environment.imagesUrl + "Images/Products/";
   { 
     this.productservice.GetLatestProducts().subscribe(res=>{
     this.ProductList = res;
-    console.log( 'lastes product home' )
-    console.log( this.ProductList )
+   
   });
 }
 }

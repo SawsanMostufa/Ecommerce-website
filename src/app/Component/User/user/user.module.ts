@@ -16,7 +16,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserShopComponent } from './component/user-shop/user-shop.component';
 import { CartComponent } from './component/cart/cart.component';
 import { ContactUsComponent } from './component/contact-us/contact-us.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -25,7 +25,7 @@ import { FormsModule } from '@angular/forms';
 const routes: Routes = [
  
   {path: 'userrofile', component:UserprofileComponent},
-  {path: 'register', component:RegisterComponent},
+  
   {path: 'basket', component:BasketComponent},
   {path: 'usershop', component:UserShopComponent},
   {path: 'checkout', component:CheckoutComponent},
@@ -35,7 +35,10 @@ const routes: Routes = [
   {path: 'cleckoutsuccess', component:CheckoutSuccessComponent},
   {path: 'productdetails/:id', component:ProductDetailsComponent},
   {path:  'cart', component:CartComponent},
-  {path:  'contactUs', component:ContactUsComponent}
+  {path:  'contactUs', component:ContactUsComponent},
+  {path:  'order-list', component:OrderListComponent},
+  {path:  'register', component:RegisterComponent}
+
 
 
 
@@ -64,6 +67,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
    RouterModule.forChild(routes)
     
   ],

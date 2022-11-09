@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges,OnChanges
 import { Basket } from 'src/app/Component/Shared/shared/Models/basket';
 import { Iproduct } from 'src/app/Component/Shared/shared/Models/iproduct';
 import { BasketService } from 'src/app/Component/Shared/shared/Services/basket.service';
+import { ProductService } from 'src/app/Component/Shared/shared/Services/product.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,13 +11,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
- cartproduct:any[]=[];
+ 
   imageUrl = environment.imagesUrl + "Images/Products/";
-  recevedTotalPrice:number=0;
+  recevedTotalPrice:number = 0; 
   product!: Iproduct;
-  // quantity = 1;
+  ProductID:any
+  cartproducts: Basket[] = [];
   @Output() onTotalPriceChange:EventEmitter<number>
-  constructor( private basketService:BasketService)
+  constructor( private basketService:BasketService , private productService:ProductService)
    { 
        this.onTotalPriceChange = new EventEmitter<number>();
    }
@@ -29,40 +31,40 @@ export class CartComponent implements OnInit {
  {
     if('cart' in localStorage)
     {
-        this.cartproduct= JSON.parse(localStorage.getItem('cart')!) 
+        this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
         this.basketTotalPrice();
     }
  }
  
  basketTotalPrice(){
     this.recevedTotalPrice=0;
-    for(var item in this.cartproduct)
+    for(var item in this.cartproducts)
     {
-        this.recevedTotalPrice+= this.cartproduct[item].price * this.cartproduct[item].quantity
+        this.recevedTotalPrice+= this.cartproducts[item].price * this.cartproducts[item].quantity
         this.onTotalPriceChange.emit(this.recevedTotalPrice);
     }
   }
   removeBasketItem(index: number){
         debugger
-        this.cartproduct.splice(index , 1);
+        this.cartproducts.splice(index , 1);
         this.basketTotalPrice();
-        localStorage.setItem('cart',JSON.stringify(this.cartproduct))
+        localStorage.setItem('cart',JSON.stringify(this.cartproducts))
       
   }
 
   clearCart()
   {
-        this.cartproduct=[];
-        localStorage.setItem('cart',JSON.stringify(this.cartproduct))
+        this.cartproducts=[];
+        localStorage.setItem('cart',JSON.stringify(this.cartproducts))
         this.basketTotalPrice();
   }
 
 
   decrementQuantity(index:number) {
-      if (this.cartproduct[index].quantity > 1)
+      if (this.cartproducts[index].quantity > 1)
        {
-        this.cartproduct[index].quantity--;
-        localStorage.setItem('cart',JSON.stringify(this.cartproduct))
+        this.cartproducts[index].quantity--;
+        localStorage.setItem('cart',JSON.stringify(this.cartproducts))
         this.basketTotalPrice();
        }
 
@@ -71,27 +73,46 @@ export class CartComponent implements OnInit {
   incrementQuantity(index:number) {
     debugger
     this.checkProductQtyAva(index )
-
   }
+  // getPrdByID( id:number)
+  // {
+  //   this.productService.GetProductID(id).subscribe(response =>{
+  //     this.ProductID = response.data;
+  //     // console.log("productcategory");
+  //     console.log(this.ProductID);
+  // });
+
+  // }
 
   checkProductQtyAva(index:number) {
-    this.basketService.checkProductQtyAva(this.cartproduct[index],this.cartproduct[index].quantity+1)
+      // debugger
+
+    this.productService.GetProductID(this.cartproducts[index].productId).subscribe(res =>{
+      console.log(res);
+      this.ProductID = res
+    console.log(this.ProductID)
+    this.ProductID.quantity=this.cartproducts[index].quantity;
+      this.basketService.checkProductQtyAva( this.ProductID ,this.cartproducts[index].quantity+1)
       .subscribe((response: any) => {
 
-       // debugger
+     
         if (response.message == "Quantity not available in stock" && response.status == false) {
             alert("Quantity not available in stock");
         }
         if (response.message == "Quantity request greater than in stock" && response.status == false) {
               alert("Quantity request greater than in stock");
-        }
+       }
         if (response.message == "Quantity available" && response.status == true) { 
-              this.cartproduct[index].quantity++;
-              localStorage.setItem('cart',JSON.stringify(this.cartproduct))
+              this.cartproducts[index].quantity++;
+              localStorage.setItem('cart',JSON.stringify(this.cartproducts))
               this.basketTotalPrice();
         }
 
       });
+    
+    });
+
+  
   }
   
 }
