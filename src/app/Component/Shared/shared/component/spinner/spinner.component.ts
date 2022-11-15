@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BusyService } from '../../Services/busy.service';
 
 @Component({
   selector: 'app-spinner',
@@ -6,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./spinner.component.scss']
 })
 export class SpinnerComponent implements OnInit {
-
-  constructor() { }
-
+  loader=true;
+  constructor( private busyService:BusyService) {
+    this.busyService.loader.subscribe(res=>{
+      this.loader=res;
+    })
+   }
   ngOnInit(): void {
   }
 

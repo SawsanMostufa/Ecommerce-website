@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import {HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AccountService } from './Component/Shared/shared/Services/account.service';
 import { TokenInterceptor } from './Component/Shared/shared/Interseptor/token.interceptor';
+import { LoadingInterceptor } from './Component/Shared/shared/Interseptor/loading.interceptor';
 
 
 @NgModule({
@@ -34,11 +35,9 @@ import { TokenInterceptor } from './Component/Shared/shared/Interseptor/token.in
   ],
   providers: [
     AccountService , 
-    {
-     provide: HTTP_INTERCEPTORS,
-     useClass: TokenInterceptor,
-     multi: true
-    },
+    { provide: HTTP_INTERCEPTORS,useClass: TokenInterceptor,multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
+
   ], 
   bootstrap: [AppComponent]
 })
