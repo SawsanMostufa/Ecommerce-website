@@ -11,14 +11,26 @@ export class AccountService {
   baseUrl = environment.baseUrl;
   constructor(private http: HttpClient,private router: Router) { }
 
+  getCurrentUser()
+   {
+    return this.http.get(this.baseUrl + 'account/getCurrentUser')
+  
+  
+  }
+  logout(){
+    localStorage.removeItem('token');
+    // this.currenUserSource.next(null);
+    this.router.navigateByUrl('/');
+  }
+ 
+  checkEmailExsist(email: string){
+    return this.http.get(this.baseUrl + 'account/emailExsist?email='+ email);
+  }
+
   login(user: any){
     debugger
     return this.http.post(this.baseUrl + 'account/login', user)
-    // if(user){
-    // localStorage.setItem("token",user.token);
    
-      
-    // }
   }
 
   register(user: any){
@@ -26,4 +38,12 @@ export class AccountService {
     return this.http.post(this.baseUrl + 'account/register', user)
       
   }
+
+  gettoken()
+  {
+    return localStorage.getItem('token');
+ 
+  }
+
+  
 }

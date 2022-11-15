@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Basket } from '../../../Models/basket';
+import { Basket, IBasket } from '../../../Models/basket';
 import { Icategory } from '../../../Models/icategory';
 import { Iproduct } from '../../../Models/iproduct';
 import { productModel } from '../../../Models/productModel';
@@ -16,13 +16,13 @@ import { ShopService } from '../../../Services/shop.service';
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.scss']
 })
-export class ShopComponent implements OnInit , OnChanges {
+export class ShopComponent implements OnInit  {
   categoryList:Icategory[]=[];
   categoryName!:string;
-  exist!:any;
+  isexist!:any;
   ProductList!:Iproduct[];
   sortProductPrice:any;
-  cartproducts:Basket[]=[];
+  basketItems!: IBasket;
   quantity = 1;
   index:any;
   basketList!:Basket;
@@ -31,26 +31,24 @@ export class ShopComponent implements OnInit , OnChanges {
  
   
   constructor( private categoryservice:CategoryService, 
-    private shopService:ShopService ,
-     private productservice:ProductService,
-     private basketService:BasketService
-     
-     ) { }
+               private shopService:ShopService ,
+               private productservice:ProductService,
+               private basketService:BasketService
+             ) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    throw new Error('Method not implemented.');
-  }
+ 
 
   ngOnInit(): void {
-    this.categoryservice.GetAllCategories().subscribe(cat =>{
-      this.categoryList=cat;
-      // console.log(this.categoryList);
-          });
-      // this.getProducts()
-    //  this.sortProductByPrice();
-    // this.ProductObj=this.productdetails;                                          
+   this.getAllCategory()
+    
+                                            
 }
-
+getAllCategory()
+  {
+     this.categoryservice.GetAllCategories().subscribe(cat =>{
+              this.categoryList=cat;
+        });
+  }
 
  onCategorySelected(name:string){
    this.categoryName=name;
@@ -61,53 +59,16 @@ sortProductByPrice(option:any)
   this.productservice.GetProduct().subscribe(response =>{
     this.ProductList = response.data
     this.ProductObj=this.ProductList;
-  //  this.ProductList.forEach(element => {
-  //         element.productSizes.sort((a,b) => a.price - b.price) 
-  //      });
-                                      
+                                       
    if(option.value =='priceAsc'){
     this.ProductList.sort((a, b) => Number(a.price) - Number(b.price))
    }
    else if(option.value =='priceDesc'){
      this.ProductList.sort((a, b) => Number(b.price) - Number(a.price))
    }
-  
-  
   });
 
 }
-
-// addItemToCartCheckQuantity()
-// {
-//  debugger
-//  this.product.quantity=this.quantity;
-
-//  this.basketService.checkProductQtyAva(this.product,this.quantity)
-//  .subscribe((response: any) => {
-//           debugger
-//        if(response.message == "Quantity not available in stock" && response.status == false){
-//            alert("Quantity not available in stock");
-//        }
-//        if(response.message == "Quantity request greater than in stock" && response.status == false){
-//           alert("Quantity request greater than in stock");
-//        }
-//        if(response.message == "Quantity available" && response.status == true){
-
-//                  // this.basketService.getAndSetItemFromBasket();
-//                      this. addtocart()
-//                      // this.cartItem= this.basketService.cartItemNumber() ;
-//                          debugger
-//           this.basketService.cartSubject.next(this.cartItem);
-//           //this.cartItems = this.basketService.cartItemNumber() ;
-//        }
-    
-//    });
-   
- 
- 
-
-//  }
-
 
 
 addtocart(event:any){
@@ -117,17 +78,16 @@ addtocart(event:any){
  if('cart' in localStorage)
  {
   debugger
-   this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
-    this.exist=this.cartproducts.find(item=>item.productId == this.basketList.productId)
-   if (this.exist) {
-               
-    this.index = this.cartproducts.findIndex(x => x.productId === this.exist.productId);
-   if((this.cartproducts[this.index].quantity + 1) <=  event.quantity)
+   this.basketItems= JSON.parse(localStorage.getItem('cart')!) 
+    this.isexist = this.basketItems.items.find(item => item.productId == this.basketList.productId)
+    
+   if (this.isexist) {
+    this.index = this.basketItems.items.findIndex(item => item.productId ===  this.isexist.productId);
+    if(this.basketItems.items[this.index].quantity +1 <= event.quantity)
    {
-     this.cartproducts[this.index].quantity += 1;
-     localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+    this.basketItems.items[this.index].quantity += 1;
+     localStorage.setItem('cart', JSON.stringify(this.basketItems))
       alert("Product added in your basket");
-
    }
    else{
      alert("Quantity request greater than in stock");
@@ -135,16 +95,17 @@ addtocart(event:any){
     }
    else{
     event.quantity=1;
-    this.cartproducts.push(this.basketList)
-    localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+    this.basketItems.items.push(this.basketList)
+    localStorage.setItem('cart',JSON.stringify(this.basketItems))
     alert("Product added in your basket");
         }
    
    }
     else{
       event.quantity=1;
-      this.cartproducts.push(this.basketList)
-      localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+      this.basketItems=this.basketService.createBasket()
+      this.basketItems.items.push(this.basketList)
+      localStorage.setItem('cart',JSON.stringify(this.basketItems))
       alert("Product added in your basket");
 
        }

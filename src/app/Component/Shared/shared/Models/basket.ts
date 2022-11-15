@@ -1,3 +1,4 @@
+
 import { Size } from "./size";
 
 export interface Basket {
@@ -11,6 +12,16 @@ export interface Basket {
     category: string;
 }
 export interface IBasket {
-    id: string;
+    id: number;
     items: Basket[];
+}
+export class BasketLis implements IBasket{
+    id:number = 0;
+    items: Basket[] = [];
+
+    BasketLis(){
+        debugger
+       this.id++;
+    }
+   
 }

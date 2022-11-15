@@ -8,6 +8,9 @@ import { AdminModule } from './Component/Admin/component/admin/admin.module';
 import { AdminRoutingModule } from './Component/Admin/component/admin/admin-routing.module';
 import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AccountService } from './Component/Shared/shared/Services/account.service';
+import { TokenInterceptor } from './Component/Shared/shared/Interseptor/token.interceptor';
 
 
 @NgModule({
@@ -27,9 +30,16 @@ import { CommonModule } from '@angular/common';
    CommonModule,
    ReactiveFormsModule,
   //  NgModel
-   
+ 
   ],
-  providers: [],
+  providers: [
+    AccountService , 
+    {
+     provide: HTTP_INTERCEPTORS,
+     useClass: TokenInterceptor,
+     multi: true
+    },
+  ], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }

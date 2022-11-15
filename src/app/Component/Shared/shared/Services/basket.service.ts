@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Basket, IBasket } from '../Models/basket';
+import { Basket, BasketLis, IBasket } from '../Models/basket';
 import { Iproduct } from '../Models/iproduct';
 import { Size } from '../Models/size';
 import { IOrderItem, IOrderToCreate } from '../Models/iorder';
@@ -19,7 +19,7 @@ export class BasketService {
   cartItem: number = 0;
   product!: Iproduct;
   quantity = 1;
-  cartproducts: any[] = [];
+  cartproducts: IBasket[] = [];
   index: any;
   count: number = 0;
   id: any;
@@ -45,38 +45,38 @@ export class BasketService {
     return 0;
   }
 
-  getAndSetItemFromBasket() {
+  // getAndSetItemFromBasket() {
 
-    if ('cart' in localStorage) {
+  //   if ('cart' in localStorage) {
 
-      this.cartproducts = JSON.parse(localStorage.getItem('cart')!)
-      let exist = this.cartproducts.find(item => item.id == this.product.id)
-      if (exist) {
-        this.index = this.cartproducts.findIndex(x => x.id === this.product.id);
+  //     this.cartproducts = JSON.parse(localStorage.getItem('cart')!)
+  //     let exist = this.cartproducts.find(item => item.id == this.product.id)
+  //     if (exist) {
+  //       this.index = this.cartproducts.findIndex(x => x.id === this.product.id);
 
-        this.cartproducts[this.index].quantity += this.quantity;
-        localStorage.setItem('cart', JSON.stringify(this.cartproducts))
-      }
-      else {
-        this.cartproducts.push(this.product)
-        localStorage.setItem('cart', JSON.stringify(this.cartproducts))
-      }
+  //       this.cartproducts[this.index].quantity += this.quantity;
+  //       localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+  //     }
+  //     else {
+  //       this.cartproducts.push(this.product)
+  //       localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+  //     }
 
-    }
-    else {
-      this.cartproducts.push(this.product)
-      this.setItemInBasket();
-    }
+  //   }
+  //   else {
+  //     this.cartproducts.push(this.product)
+  //     this.setItemInBasket();
+  //   }
 
-  }
+  // }
 
   getCurrentBasketValue() {
 
     return JSON.parse(localStorage.getItem('cart')!)
   }
 
-  setItemInBasket() {
-    localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+  setItemInBasket(basket:IBasket) {
+    localStorage.setItem('cart', JSON.stringify(basket))
   }
    mapPRoductItemToBasketItems(item: Iproduct, quantity: number): Basket {
     // console.log(item.productSizes);
@@ -94,7 +94,11 @@ export class BasketService {
     };
 
   }
-
+   createBasket(): IBasket {
+    const basket = new BasketLis();
+    //localStorage.setItem('basket_id',basket.id);
+    return basket;
+  }
 
 }
 

@@ -15,12 +15,16 @@ import { ShopComponent } from './component/Shop/shop/shop.component';
 import { PagerComponent } from './component/Home/pager/pager.component';
 import { SpinnerComponent } from './component/spinner/spinner.component';
 import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
+import { AccountService } from './Services/account.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './Interseptor/token.interceptor';
 
 // import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [
   
   {path: 'product', component:ProductComponent },
   {path: 'shop', component:ShopComponent },
+  
   {path: 'login', component:LoginComponent}, 
 
 
@@ -61,6 +65,8 @@ const routes: Routes = [
     HomeComponent,
     ShopComponent
    
-  ]
+  ],
+ 
+
 })
 export class SharedModule { }

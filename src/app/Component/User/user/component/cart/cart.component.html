@@ -1,7 +1,7 @@
 
      <div class="col-12 py-5 mb-1">
         
-        <button  type="button" class="btn btn-success" (click)="clearCart()">Clear Cart</button>
+        <button  type="button" class="btn btn-success" (click)="clearBasket()">Clear Cart</button>
     </div>
 <ng-container >
     <div class="table-responsive ">
@@ -29,7 +29,7 @@
 
             </thead>
             <tbody>
-                <tr *ngFor="let item of cartproducts let index=index" >
+                <tr *ngFor="let item of basketItems.items let index=index" >
                     <th scope="row">
                         <div class="p-2">
                             <img  src="{{imageUrl + item.pictureUrl}}" alt="{{item.productName}}" class="img-fluid"

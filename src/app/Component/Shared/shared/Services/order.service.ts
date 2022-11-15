@@ -21,10 +21,13 @@ export class OrderService {
     return this.httpclient.get<Iorder>(this.baseUrl + 'order/getOrderDetails/'+ orderId);
   }
 
+ 
   createOrder(order: IOrderToCreate)
   {
     debugger
-    return this.httpclient.post(this.baseUrl + 'order/createOrder', order);
+   
+    return this.httpclient.post(this.baseUrl + 'order/createOrder', order,);
   }
+
 
 }

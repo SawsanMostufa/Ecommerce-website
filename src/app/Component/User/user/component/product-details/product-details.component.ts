@@ -6,7 +6,7 @@ import { productModel } from 'src/app/Component/Shared/shared/Models/productMode
 import { BasketService } from 'src/app/Component/Shared/shared/Services/basket.service';
 import { ProductService } from 'src/app/Component/Shared/shared/Services/product.service';
 import { environment } from 'src/environments/environment';
-import { Basket } from 'src/app/Component/Shared/shared/Models/basket';
+import { Basket, BasketLis, IBasket } from 'src/app/Component/Shared/shared/Models/basket';
 import { Size } from 'src/app/Component/Shared/shared/Models/size';
 
 @Component({
@@ -20,13 +20,13 @@ export class ProductDetailsComponent implements OnInit {
   id: any;
   countCart: any[] = [];
   cartItem: number = 0;
-  image = environment.imagesUrl + "Images/Products/"; 
-  cartproducts: Basket[] = [];
+  image = environment.imagesUrl + "Images/Products/";
+  basketItems!: IBasket;
   quantity = 1;
   index: any;
-ProductObj:any;
+  ProductObjDetails: any;
   cartItems: number = 0;
-  basketList!:Basket;
+  productItem!: Basket;
   constructor(private router: Router, private productService: ProductService,
     private basketService: BasketService,
     private activateRoute: ActivatedRoute) { }
@@ -36,20 +36,27 @@ ProductObj:any;
 
   }
   ngOnInit(): void {
+
     this.activateRoute.paramMap.subscribe({
       next: (pramas: ParamMap) => { this.id = pramas.get("id"); },
       error: (err) => { throw new Error(err) }
     })
+
+    this.getProductDetails()
+
+  }
+
+  getProductDetails() {
     this.productService.GetProductID(this.id).subscribe(res => {
       // debugger
       this.productdetails = res
       this.product = this.productdetails
-      this.ProductObj=this.productdetails;
+      this.ProductObjDetails = this.productdetails;
     });
-   
-    
   }
-  cartItemNumber() {
+
+
+ countItemsInCart() {
 
     if ('cart' in localStorage) {
 
@@ -67,21 +74,15 @@ ProductObj:any;
   }
 
   incrementQuantity() {
-    // this.checkProductQtyAva()
     this.quantity++;
-
   }
 
 
-  addItemToCart () {
+  checkProductQtyAva() {
     debugger
-     
-        
-       // console.log( this.product.quantity)
+
     this.basketService.checkProductQtyAva(this.product, this.quantity)
       .subscribe((response: any) => {
-        debugger
-         
 
         if (response.message == "Quantity not available in stock" && response.status == false) {
           alert("Quantity not available in stock");
@@ -89,60 +90,66 @@ ProductObj:any;
         if (response.message == "Quantity request greater than in stock" && response.status == false) {
           alert("Quantity request greater than in stock");
         }
-        if (response.message == "Quantity available" && response.status == true) 
-        {
-           
-            // this.product.quantity = this.quantity;
-            
-            this.checkProductQtyAva()
-              // this.cartItem= this.basketService.cartItemNumber() ;
-            debugger
-            this.basketService.cartSubject.next(this.cartItem);
-             //this.cartItems = this.basketService.cartItemNumber() ;
+        if (response.message == "Quantity available" && response.status == true) {
+          this.addItemToCart()
+          // this.cartItem= this.basketService.cartItemNumber() ;
+          debugger
+          this.basketService.cartSubject.next(this.cartItem);
+          //this.cartItems = this.basketService.cartItemNumber() ;
         }
-           
+
       });
 
   }
+  incrementQtyORoutStockInBasket()
+  {
+    if (this.basketItems.items[this.index].quantity + this.quantity <= this.ProductObjDetails.quantity) 
+    {
+      this.basketItems.items[this.index].quantity += this.quantity;
+      localStorage.setItem('cart', JSON.stringify(this.basketItems))
+      alert("Product added in your basket");
+    }
+    else {
+      alert("Quantity request greater than in stock");
+    }
+  }
 
-     checkProductQtyAva() {
-    this.basketList= this.basketService.mapPRoductItemToBasketItems(this.product,this.quantity)
+  isItemExestInBasket()
+  {
+    let isExist = this.basketItems.items.find(item => item.productId == this.product.id)
 
-    if ('cart' in localStorage) {
+    if (isExist) {
 
-      this.cartproducts = JSON.parse(localStorage.getItem('cart')!)
+      this.index = this.basketItems.items.findIndex(item => item.productId === this.product.id);
 
-      let exist = this.cartproducts.find(item => item.productId == this.product.id)
-     
-      if (exist) {
-               
-         this.index = this.cartproducts.findIndex(x => x.productId === this.product.id);
-        if(this.cartproducts[this.index].quantity + this.quantity <= this.ProductObj.quantity)
-        {
-          this.cartproducts[this.index].quantity += this.quantity;
-          localStorage.setItem('cart', JSON.stringify(this.cartproducts))
-           alert("Product added in your basket");
-        }
-        else{
-          alert("Quantity request greater than in stock");
-        }
-      }
-      else {
-        this.product.quantity = this.quantity;
+      this.incrementQtyORoutStockInBasket()
 
-        this.cartproducts.push( this.basketList)
-        localStorage.setItem('cart', JSON.stringify(this.cartproducts))
-        alert("Product added in your basket");
-      }
     }
     else {
       this.product.quantity = this.quantity;
-      this.cartproducts.push( this.basketList)
-      localStorage.setItem('cart', JSON.stringify(this.cartproducts))
+      this.basketItems.items.push(this.productItem)
+      localStorage.setItem('cart', JSON.stringify(this.basketItems))
       alert("Product added in your basket");
-
     }
 
+  }
+
+  addItemToCart() {
+    debugger
+    this.productItem = this.basketService.mapPRoductItemToBasketItems(this.product, this.quantity)
+    if ('cart' in localStorage) {
+      this.basketItems = JSON.parse(localStorage.getItem('cart')!)
+
+      this.isItemExestInBasket()
+    }
+    else {
+      this.product.quantity = this.quantity;
+      this.basketItems = this.basketService.createBasket()
+      this.basketItems.items.push(this.productItem)
+
+      localStorage.setItem('cart', JSON.stringify(this.basketItems))
+      alert("Product added in your basket");
+    }
   }
 
 }

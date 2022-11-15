@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges,OnChanges } from '@angular/core';
-import { Basket } from 'src/app/Component/Shared/shared/Models/basket';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { Basket, IBasket } from 'src/app/Component/Shared/shared/Models/basket';
 import { Iproduct } from 'src/app/Component/Shared/shared/Models/iproduct';
 import { BasketService } from 'src/app/Component/Shared/shared/Services/basket.service';
 import { ProductService } from 'src/app/Component/Shared/shared/Services/product.service';
@@ -11,108 +11,99 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
- 
+
   imageUrl = environment.imagesUrl + "Images/Products/";
-  recevedTotalPrice:number = 0; 
+  recevedTotalPrice: number = 0;
   product!: Iproduct;
-  ProductID:any
-  cartproducts: Basket[] = [];
-  @Output() onTotalPriceChange:EventEmitter<number>
-  constructor( private basketService:BasketService , private productService:ProductService)
-   { 
-       this.onTotalPriceChange = new EventEmitter<number>();
-   }
-
- ngOnChanges(changes: SimpleChanges): void {}
- ngOnInit(): void {
-      this. getCartProduct() 
+  ProductID: any
+  basketItems!: IBasket;
+  @Output() onTotalPriceChange: EventEmitter<number>
+  constructor(private basketService: BasketService, private productService: ProductService) {
+    this.onTotalPriceChange = new EventEmitter<number>();
   }
- getCartProduct()
- {
-    if('cart' in localStorage)
-    {
-        this.cartproducts= JSON.parse(localStorage.getItem('cart')!) 
-        this.basketTotalPrice();
-    }
- }
- 
- basketTotalPrice(){
-    this.recevedTotalPrice=0;
-    for(var item in this.cartproducts)
-    {
-        this.recevedTotalPrice+= this.cartproducts[item].price * this.cartproducts[item].quantity
-        this.onTotalPriceChange.emit(this.recevedTotalPrice);
+
+  ngOnChanges(changes: SimpleChanges): void { }
+  ngOnInit(): void {
+
+    this.getBasketItems()
+  }
+  getBasketItems() {
+    if ('cart' in localStorage) {
+      this.basketItems = JSON.parse(localStorage.getItem('cart')!)
+      this.basketTotalPrice();
     }
   }
-  removeBasketItem(index: number){
-        debugger
-        this.cartproducts.splice(index , 1);
-        this.basketTotalPrice();
-        localStorage.setItem('cart',JSON.stringify(this.cartproducts))
-      
+
+  basketTotalPrice() {
+    this.recevedTotalPrice = 0;
+    for (var item in this.basketItems.items) {
+      this.recevedTotalPrice += this.basketItems.items[item].price * this.basketItems.items[item].quantity
+      this.onTotalPriceChange.emit(this.recevedTotalPrice);
+    }
   }
 
-  clearCart()
-  {
-        this.cartproducts=[];
-        localStorage.setItem('cart',JSON.stringify(this.cartproducts))
-        this.basketTotalPrice();
-  }
-
-
-  decrementQuantity(index:number) {
-      if (this.cartproducts[index].quantity > 1)
-       {
-        this.cartproducts[index].quantity--;
-        localStorage.setItem('cart',JSON.stringify(this.cartproducts))
-        this.basketTotalPrice();
-       }
-
-  }
-
-  incrementQuantity(index:number) {
+  removeBasketItem(index: number) {
     debugger
-    this.checkProductQtyAva(index )
+    this.basketItems.items.splice(index, 1);
+    this.basketTotalPrice();
+    localStorage.setItem('cart', JSON.stringify(this.basketItems))
+
   }
-  // getPrdByID( id:number)
-  // {
-  //   this.productService.GetProductID(id).subscribe(response =>{
-  //     this.ProductID = response.data;
-  //     // console.log("productcategory");
-  //     console.log(this.ProductID);
-  // });
 
-  // }
+  clearBasket() {
+    this.basketItems.items = [];
+    localStorage.setItem('cart', JSON.stringify(this.basketItems))
+    this.basketTotalPrice();
+  }
 
-  checkProductQtyAva(index:number) {
-      // debugger
 
-    this.productService.GetProductID(this.cartproducts[index].productId).subscribe(res =>{
-      console.log(res);
-      this.ProductID = res
-    console.log(this.ProductID)
-    this.ProductID.quantity=this.cartproducts[index].quantity;
-      this.basketService.checkProductQtyAva( this.ProductID ,this.cartproducts[index].quantity+1)
-      .subscribe((response: any) => {
+  decrementQuantity(index: number) {
+    if (this.basketItems.items[index].quantity > 1) {
+      this.basketItems.items[index].quantity--;
+      localStorage.setItem('cart', JSON.stringify(this.basketItems))
+      this.basketTotalPrice();
+    }
 
-     
-        if (response.message == "Quantity not available in stock" && response.status == false) {
-            alert("Quantity not available in stock");
-        }
-        if (response.message == "Quantity request greater than in stock" && response.status == false) {
+  }
+
+  incrementQuantity(index: number) {
+    debugger
+    this.checkProductQtyAva(index)
+  }
+
+  setItemInLocalStorage() {
+    localStorage.setItem('cart', JSON.stringify(this.basketItems))
+  }
+
+  checkProductQtyAva(index: number) {
+    // debugger
+
+    this.productService.GetProductID(this.basketItems.items[index].productId)
+      .subscribe(res => {
+        this.ProductID = res
+        this.ProductID.quantity = this.basketItems.items[index].quantity;
+
+        this.basketService.checkProductQtyAva(this.ProductID, this.basketItems.items[index].quantity + 1)
+          .subscribe((response: any) => {
+
+            if (response.message == "Quantity not available in stock" && response.status == false) {
+              alert("Quantity not available in stock");
+            }
+            if (response.message == "Quantity request greater than in stock" && response.status == false) {
               alert("Quantity request greater than in stock");
-       }
-        if (response.message == "Quantity available" && response.status == true) { 
-              this.cartproducts[index].quantity++;
-              localStorage.setItem('cart',JSON.stringify(this.cartproducts))
+            }
+            if (response.message == "Quantity available" && response.status == true) {
+
+              this.basketItems.items[index].quantity++;
+              this.setItemInLocalStorage()
               this.basketTotalPrice();
-        }
+            }
+
+          });
 
       });
-    
-    });
 
-  
+
   }
-  
+
 }
