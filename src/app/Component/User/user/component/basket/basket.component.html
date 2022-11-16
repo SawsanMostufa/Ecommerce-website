@@ -28,14 +28,7 @@
                 <p class="font-italic mb-4">Shipping costs 20$ will be added depending on choices made during
                     checkout </p>
                 <ul class="list-unstyled mb-4">
-                    <!-- <li class="d-flex justify-content-between py-3 border-bottom">
-                        <strong class="text-muted">Order subtotal</strong>
-                         <strong>{{subtotal | currency}}</strong> 
-                    </li> -->
-                    <!-- <li class="d-flex justify-content-between py3 border-bottom">
-                        <strong class="text-muted">Shipping and handling</strong>
-                        <strong>{{shippingPrice | currency}}</strong>
-                    </li> -->
+              
                     <li class="d-flex justify-content-between py-3 border-bottom">
                         
                         <strong class="text-muted">Total amount</strong>
@@ -57,7 +50,7 @@
          <div class="row mb-5">
                  <div class="col-6 offset-6">
                    
-                     <button class="btn btn-outline-primary py-2 btn-block" (click)="submitOrder()">
+                     <button class="btn btn-outline-primary py-2 btn-block" (click)="submitOrder()" routerLink="/user/cleckoutsuccess">
                     Pyment</button>
                  </div>
             </div>

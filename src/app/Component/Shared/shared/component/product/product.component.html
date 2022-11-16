@@ -1,6 +1,23 @@
+<div class="row">
+    <div class="input-group mx-5 mb-3">
+      <span
+        class="input-group-text mt-5 ms-5"
+        id="inputGroup-sizing-default"
+        >Search</span
+      >
+      <input
+        type="text"
+        [(ngModel)]="ProductName"
+        placeholder="search"
+        class="form-control mt-5 me-5"
+        aria-label="Sizing example input"
+        aria-describedby="inputGroup-sizing-default"
+      />
+    </div>
 <section class="p-5">
     <div class="row">
-        <div class="col-md-4" *ngFor="let product of productListOfCat">
+        <div class="col-md-4" *ngFor="let product of productListOfCat| filter: ProductName
+        ">
             <div class="card mb-4 product-wap rounded-0" >
                 <div class="card rounded-0">
                     <img class="card-img rounded-0 img-fluid imgsty" src="{{image + product.pictureUrl}}">

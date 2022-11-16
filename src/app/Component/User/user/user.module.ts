@@ -17,6 +17,8 @@ import { UserShopComponent } from './component/user-shop/user-shop.component';
 import { CartComponent } from './component/cart/cart.component';
 import { ContactUsComponent } from './component/contact-us/contact-us.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CheckSuccesComponent } from './component/check-succes/check-succes.component';
+import { AuthGuard } from '../../Shared/Gaurds/auth.guard';
 
 
 
@@ -32,7 +34,7 @@ const routes: Routes = [
   {path: 'checkoutaddress', component:CheckoutAddressComponent,},
   {path: 'checkoutreview', component:CheckoutReviewComponent},
   {path: 'cleckoutpayment', component:CheckoutPaymentComponent},
-  {path: 'cleckoutsuccess', component:CheckoutSuccessComponent},
+  {path: 'cleckoutsuccess', component:CheckoutSuccessComponent,canActivate:[AuthGuard]},
   {path: 'productdetails/:id', component:ProductDetailsComponent},
   {path:  'cart', component:CartComponent},
   {path:  'contactUs', component:ContactUsComponent},
@@ -62,6 +64,7 @@ const routes: Routes = [
     UserShopComponent,
     CartComponent,
     ContactUsComponent,
+    CheckSuccesComponent,
    
   ],
   imports: [

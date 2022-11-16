@@ -43,13 +43,7 @@ export class BasketComponent implements OnInit {
 }
 getOrderToCreate(basket: IBasket) {
   debugger
-  // this.getCurrentUserFromBasket()
     let orderItems = this.basketService.getCurrentBasketValue().items;
-
-     // orderItems.forEach((element:any)=>{
-    // element.total = element.price * element.quantity;
-   //});
-
   return {
     orderItems : orderItems
   };

@@ -16,7 +16,7 @@ import { ProductService } from '../../Services/product.service';
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit , OnChanges {
-
+  ProductName:any
 ProductList!:Iproduct[];
  productListOfCat:Iproduct[]=[];
 ProductID:any;

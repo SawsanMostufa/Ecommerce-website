@@ -12,6 +12,7 @@ import {HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AccountService } from './Component/Shared/shared/Services/account.service';
 import { TokenInterceptor } from './Component/Shared/shared/Interseptor/token.interceptor';
 import { LoadingInterceptor } from './Component/Shared/shared/Interseptor/loading.interceptor';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 
 @NgModule({
@@ -30,6 +31,8 @@ import { LoadingInterceptor } from './Component/Shared/shared/Interseptor/loadin
     FormsModule,
    CommonModule,
    ReactiveFormsModule,
+   Ng2SearchPipeModule
+
   //  NgModel
  
   ],

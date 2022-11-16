@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Login } from '../Models/login';
 
@@ -8,8 +9,11 @@ import { Login } from '../Models/login';
   providedIn: 'root'
 })
 export class AccountService {
+  private isLoggedSubject:BehaviorSubject<boolean>;
   baseUrl = environment.baseUrl;
-  constructor(private http: HttpClient,private router: Router) { }
+  constructor(private http: HttpClient,private router: Router) { 
+    this.isLoggedSubject=new BehaviorSubject<boolean>(this.isUserLogged);
+  }
 
   getCurrentUser()
    {
@@ -44,6 +48,12 @@ export class AccountService {
     return localStorage.getItem('token');
  
   }
-
-  
+  get isUserLogged():boolean
+  {
+    return localStorage.getItem('token')?true : false;
+  }
+  getloggedStatus():Observable<boolean>
+  {
+    return this.isLoggedSubject.asObservable();
+  }
 }

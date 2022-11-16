@@ -18,6 +18,7 @@ import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from './Services/account.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './Interseptor/token.interceptor';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 // import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [
@@ -54,7 +55,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,
-    
+    Ng2SearchPipeModule
+
   //  HttpClientModule
    
   ],
