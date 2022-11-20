@@ -4,7 +4,6 @@ import { Size } from "./size";
 export interface Basket {
     productId: number;
     productName: string;
-    // size: string;
     productSizes:Size[];
     price: number;
     quantity: number;
@@ -15,6 +14,10 @@ export interface IBasket {
     id: number;
     items: Basket[];
 }
+// export class Baskets {
+//     id: number=0;
+//     items: Basket[]=[];
+// }
 export class BasketLis implements IBasket{
     id:number = 0;
     items: Basket[] = [];

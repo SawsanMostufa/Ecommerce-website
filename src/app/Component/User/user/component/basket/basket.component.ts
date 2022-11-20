@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges,OnChanges } from '@angular/core';
+import { Observable } from 'rxjs';
 import { IBasket } from 'src/app/Component/Shared/shared/Models/basket';
 import { Iorder, IOrderItem, IOrderToCreate } from 'src/app/Component/Shared/shared/Models/iorder';
 import { Login } from 'src/app/Component/Shared/shared/Models/login';
@@ -14,21 +15,24 @@ import { environment } from 'src/environments/environment';
 export class BasketComponent implements OnInit {
   image = environment.imagesUrl + "Images/Products/";
   recevedTotalPrice:any;
-
+  basketItems!: IBasket;
+  basketlist!:IBasket;
+  countCart:number=0;
+ 
   constructor( private orderService:OrderService , private basketService:BasketService) { }
   
    ngOnChanges(changes: SimpleChanges): void {
     
     }
   ngOnInit(): void {
-    
+    this.basketlist = JSON.parse(localStorage.getItem('cart')!)
   }
+ 
+
   updateTotalPrice(totalPrice:number )
   {
     this.recevedTotalPrice=totalPrice;
   }
-
- 
 
   submitOrder(){
      debugger
@@ -37,8 +41,11 @@ export class BasketComponent implements OnInit {
      const orderToCreate = this.getOrderToCreate(basket);
    
   this.orderService.createOrder(orderToCreate).subscribe((order:any) => {
-     localStorage.setItem('cart', JSON.stringify([]))
+   
+     localStorage.removeItem('cart')
+     this.basketService.cartSubject.next(0);
      alert("Order submitted successfully");
+  
   })
 }
 getOrderToCreate(basket: IBasket) {

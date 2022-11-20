@@ -17,6 +17,8 @@ export class CartComponent implements OnInit {
   product!: Iproduct;
   ProductID: any
   basketItems!: IBasket;
+  countCart!:IBasket
+  cartItem:number=0;
   @Output() onTotalPriceChange: EventEmitter<number>
   constructor(private basketService: BasketService, private productService: ProductService) {
     this.onTotalPriceChange = new EventEmitter<number>();
@@ -27,6 +29,16 @@ export class CartComponent implements OnInit {
 
     this.getBasketItems()
   }
+  countItemsInCart() {
+
+    if ('cart' in localStorage) {
+
+      this.countCart = JSON.parse(localStorage.getItem('cart')!)
+      this.cartItem = this.countCart.items.length;
+      this.basketService.cartSubject.next(this.cartItem);
+    }
+  }
+
   getBasketItems() {
     if ('cart' in localStorage) {
       this.basketItems = JSON.parse(localStorage.getItem('cart')!)
@@ -47,13 +59,14 @@ export class CartComponent implements OnInit {
     this.basketItems.items.splice(index, 1);
     this.basketTotalPrice();
     localStorage.setItem('cart', JSON.stringify(this.basketItems))
-
+    this.countItemsInCart()
   }
 
   clearBasket() {
     this.basketItems.items = [];
     localStorage.setItem('cart', JSON.stringify(this.basketItems))
     this.basketTotalPrice();
+    this.countItemsInCart()
   }
 
 

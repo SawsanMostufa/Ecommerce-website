@@ -13,7 +13,7 @@ import { AccountService } from './Component/Shared/shared/Services/account.servi
 import { TokenInterceptor } from './Component/Shared/shared/Interseptor/token.interceptor';
 import { LoadingInterceptor } from './Component/Shared/shared/Interseptor/loading.interceptor';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,9 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     FormsModule,
    CommonModule,
    ReactiveFormsModule,
-   Ng2SearchPipeModule
+   Ng2SearchPipeModule,
+   NgxPaginationModule
+   
 
   //  NgModel
  

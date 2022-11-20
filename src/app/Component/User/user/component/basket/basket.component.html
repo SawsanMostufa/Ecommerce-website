@@ -1,6 +1,14 @@
 <div class="container mt-2" >
 
-    <div class="row">
+    <div class="row" *ngIf="basketlist.items.length == 0">
+        <div class="col-xl-12">
+            <div class="card-body text-center" style="color:darkgrey">
+                <p>There are no items in your basket</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="basketlist">
         <div class="col-xl-12">
             <div class="card-body text-center" style="color:darkgrey">
                 <!-- <p>There are no items in your basket</p> -->

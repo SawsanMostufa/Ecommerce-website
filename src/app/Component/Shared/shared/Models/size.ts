@@ -1,7 +1,10 @@
 export interface Size {
     id:number;
     value:string;
-    // price: number;
-    // discount: number;
-    // quantity: number;
+  
+}
+export class Size {
+     id:number=0;
+     value:string="";
+    
 }

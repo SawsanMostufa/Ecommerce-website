@@ -12,10 +12,11 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class BasketService {
-  // public cartItemList = new BehaviorSubject<any>([]);
-  // private basketSource = new BehaviorSubject<Basket>(null);
+ 
+  // private basketSource = new BehaviorSubject<any>(null);
+  // basket$ = this.basketSource.asObservable();
 
-  countCart: any[] = [];
+  countCart!: IBasket;
   cartItem: number = 0;
   product!: Iproduct;
   quantity = 1;
@@ -34,14 +35,14 @@ export class BasketService {
   }
   
   cartItemNumber() {
-
+    debugger
     if ('cart' in localStorage) {
 
       this.countCart = JSON.parse(localStorage.getItem('cart')!)
-      return this.cartItem = this.countCart.length;
-
+      this.cartItem= this.countCart.items.length;
+      return this.cartItem;
+      
     }
-
     return 0;
   }
 

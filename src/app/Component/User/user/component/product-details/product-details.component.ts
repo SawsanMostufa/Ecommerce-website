@@ -18,7 +18,7 @@ export class ProductDetailsComponent implements OnInit {
   product!: Iproduct;
   productdetails: any;
   id: any;
-  countCart: any[] = [];
+  countCart!:IBasket;
   cartItem: number = 0;
   image = environment.imagesUrl + "Images/Products/";
   basketItems!: IBasket;
@@ -61,7 +61,7 @@ export class ProductDetailsComponent implements OnInit {
     if ('cart' in localStorage) {
 
       this.countCart = JSON.parse(localStorage.getItem('cart')!)
-      this.cartItem = this.countCart.length;
+      this.cartItem = this.countCart.items.length;
       this.basketService.cartSubject.next(this.cartItem);
     }
   }
@@ -92,10 +92,8 @@ export class ProductDetailsComponent implements OnInit {
         }
         if (response.message == "Quantity available" && response.status == true) {
           this.addItemToCart()
-          // this.cartItem= this.basketService.cartItemNumber() ;
-          debugger
-          this.basketService.cartSubject.next(this.cartItem);
-          //this.cartItems = this.basketService.cartItemNumber() ;
+          this.countItemsInCart(); 
+         
         }
 
       });
@@ -149,6 +147,8 @@ export class ProductDetailsComponent implements OnInit {
 
       localStorage.setItem('cart', JSON.stringify(this.basketItems))
       alert("Product added in your basket");
+      this.basketService.cartSubject.next(this.cartItem);
+
     }
   }
 

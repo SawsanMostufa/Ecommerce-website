@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { IUser } from 'src/app/Component/User/user/Models/user';
 import { environment } from 'src/environments/environment';
 import { Login } from '../Models/login';
 
@@ -11,16 +13,37 @@ import { Login } from '../Models/login';
 export class AccountService {
   private isLoggedSubject:BehaviorSubject<boolean>;
   baseUrl = environment.baseUrl;
+  // private currenUserSource = new ReplaySubject<IUser>(1);
+  // currentUser$ = this.currenUserSource.asObservable();
   constructor(private http: HttpClient,private router: Router) { 
     this.isLoggedSubject=new BehaviorSubject<boolean>(this.isUserLogged);
   }
 
+  // loadCurrenyUser(token: string){
+  //   debugger
+  //   if(token === null){
+  //     this.currenUserSource.next(undefined);
+  //     return undefined;
+  //   }
+  //   debugger
+  //   return this.http.get(this.baseUrl + 'account/getCurrentUser')
+  //   .pipe(
+  //     map((user: any) => {
+  //       console.log(user)
+  //       if(user){
+  //         localStorage.setItem("token",user.token);
+  //         this.currenUserSource.next(user);
+  //       }
+  //     })
+  //   );
+ // }
+
   getCurrentUser()
    {
+    debugger
     return this.http.get(this.baseUrl + 'account/getCurrentUser')
-  
-  
-  }
+   } 
+
   logout(){
     localStorage.removeItem('token');
     // this.currenUserSource.next(null);

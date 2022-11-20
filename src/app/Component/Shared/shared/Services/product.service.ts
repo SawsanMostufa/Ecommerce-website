@@ -1,15 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Iproduct } from '../Models/iproduct';
 import {map} from 'rxjs/operators';
 import { productModel } from '../Models/productModel';
+import { IPagination } from '../Models/pagination';
  
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+  baseUrl = environment.baseUrl;
+filterByProductName = new Subject<any>();
 
   constructor( private httpclient:HttpClient) { }
 
@@ -37,10 +40,11 @@ export class ProductService {
    return this.httpclient.get<Iproduct[]>(`${environment.baseUrl}Product/getLatestProducts`);
   
   }
+getproductpagination(pageNumber: number, pageSize: number,searchText:string){
+  return this.httpclient.get<IPagination>(this.baseUrl + `product/getProducts?pageNo=${pageNumber}
+  &pageSize=${pageSize}&searchText=${searchText}`)
+ 
+}
 
-  // addProduct(newprd:Iproduct):Observable<Iproduct>
-  // {
-  //    this.httpclient.post<Iproduct>(`${environment.baseUrl}Product',);
-    
-  // }
+ 
 }

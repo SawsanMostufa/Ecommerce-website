@@ -25,6 +25,7 @@ ProductID:any;
 @Output() sendproduct:EventEmitter<any>=new EventEmitter();
 defaultSize:Size[]=[];
 image = environment.imagesUrl + "Images/Products/";
+defImage = "../../../../../assets/img/No_Image_Available.jpg";
   constructor(private service:ProductService )
    {}
 
@@ -39,15 +40,19 @@ image = environment.imagesUrl + "Images/Products/";
         }
     
     this.productListOfCat=this.resevedSortProductByPrice;
-
   }
    
    
   ngOnInit(): void {
   
         this.getProducts();
-       
+          this.service.filterByProductName.subscribe((res)=>{
+      this.ProductName=res
+      console.log( this.ProductName)
+     })
   }
+
+ 
   sortPrice(){
     this.productListOfCat=this.resevedSortProductByPrice;
   }
